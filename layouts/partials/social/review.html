@@ -1,0 +1,29 @@
+{{ $title := .title }}
+{{ $page := .page }}
+{{ $context := .context }}
+{{ $showIcon := .showIcon }}
+
+{{ $url := .RelPermalink }}
+{{ if eq $page.RelPermalink $context.RelPermalink }}
+  {{ $url = "" }}
+{{ end }}
+
+{{ if $context.Content }}
+  <!-- if content is really big, add a wide class -->
+  <div class="review {{ if $showIcon }}with-icon{{ else }}no-icon{{ end }}">
+    <a {{ if $url }}href="{{ $url }}"{{ end }}>
+      <span class="review-icon">
+        <span class="review-letter">A</span>
+        <i class="fas fa-{{ default "medal" .Page.Params.icon }}"></i>
+      </span>
+    </a>
+    <div class="review-details">
+      <div>
+        <h5>{{ $title }}</h5>
+      </div>
+      <div>
+        {{ $context.Content }}
+      </div>
+    </div>
+  </div>
+{{ end }}

@@ -1,0 +1,176 @@
+button {
+    font-size: 2.0rem;
+    font-weight: 100;
+    letter-spacing: 1.02px;
+
+    font-size: 1.75rem;
+    font-weight: 300;
+
+    transition: color 2s ease-in-out, background-color 2s ease-in-out;
+    background: var(--color-background);
+    color: var(--color-foreground);
+
+    // border: 1px lighten($calltoaction, 15%) solid;
+    // border-radius: 8px;
+
+    margin: 0;
+
+    font-size: 1.3rem;
+    color: $calltoaction;
+    border: 1px $calltoaction solid;
+    border-color: $calltoaction;
+    border-radius: 8px;
+
+    padding: $gutter/3 $gutter/2;
+
+    strong {
+        color: lighten($calltoaction, 10%);
+        font-size: 1.8rem;
+    }
+
+    &:hover {
+        border: 1px $calltoaction solid;
+        background: $calltoaction;
+
+        color: lighten($calltoaction, 30%);
+
+        strong {
+            color: lighten($calltoaction, 40%);
+        }
+    }
+
+    .arrow {
+        // transition: all 0.2s;
+        font-size: 1.2rem;
+        font-weight: 800;
+    }
+}
+
+div.call-to-action-container {
+    display: block;
+    height: 40px;
+    font-size: 2.0rem;
+    padding-right: 5px;
+    text-align: right;
+    margin: 30px 0 50px 0;
+
+    a.caption {
+        border-left: 5px solid $calltoaction;
+        padding-left: 15px;
+        width: auto;
+    }
+
+    a.button {
+        font-weight: 100;
+        letter-spacing: 1.02px;
+
+        &.primary {
+            font-weight: bold;
+        }
+
+        &.alternative {
+            font-style: italic;
+        }
+
+        transition: all 0.4s !important;
+
+        strong {
+            transition: all 0.4s !important;
+            font-weight: 900;
+        }
+
+        &:hover {
+            color: var(--color-foreground);
+
+            strong {
+                color: var(--color-foreground);
+            }
+        }
+
+        .arrow {
+            // transition: all 0.2s;
+            font-size: 1.2rem;
+            font-weight: 800;
+        }
+
+
+        &.button {
+            font-size: 1.75rem;
+            font-weight: 300;
+
+            border: 1px lighten($calltoaction, 0%) solid;
+            border-radius: 8px;
+            padding: 5px 15px;
+            color: lighten($calltoaction, 15%);
+
+            strong {
+                color: lighten($calltoaction, 10%);
+            }
+
+            &:hover {
+                border: 1px $calltoaction solid;
+                background: $calltoaction;
+
+                color: lighten($calltoaction, 30%);
+
+                strong {
+                    color: lighten($calltoaction, 40%);
+                }
+            }
+        }
+
+        &.link {
+            text-decoration: underline;
+            text-decoration-color: lighten($calltoaction, 50%);
+            font-size: 1.8rem;
+
+            strong {
+                font-size: 2.25rem;
+            }
+
+            &.arrow {
+                color: $foreground, 80%;
+            }
+
+            &:hover {
+                text-decoration-color: lighten($calltoaction, 30%);
+                font-size: 2.15rem;
+
+                &.arrow {
+                    color: $foreground;
+                }
+
+                strong {
+                    font-size: 2.4rem;
+                }
+            }
+
+        }
+    }
+}
+
+
+div.alternative {
+    background: $alternative !important;
+}
+
+div.tertiary {
+    background: $calltoaction !important;
+}
+
+div.alternative {
+    // a {
+    //     border: 1px $alternative solid !important;
+    //     color: rgba(0, 0, 0, 0.25) !important;
+    //     font-size: 1.4rem !important;
+
+    //     strong {
+    //         font-size: 1.4rem !important;
+    //     }
+
+    //     &:hover {
+    //         color: rgba(255, 255, 255, 0.8) !important;
+    //         background: $alternative !important;
+    //     }
+    // }
+}

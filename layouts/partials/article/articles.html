@@ -1,0 +1,96 @@
+{{ $context := .context }}
+{{ $taxonomy := .taxonomy }}
+{{ $taxonomies := .taxonomies }}
+{{ $term := .term }}
+{{ $terms := .terms }}
+{{ $keyword := .keyword }}
+{{ $kind := .kind }}
+
+
+<h1>ARTICLES TEMPLATE IS HMM?</h1>
+
+<!-- Does this require images? -->
+{{ if $context }}
+  {{ $pages := slice }}
+  {{ if not $pages }}
+    {{ $pages := $context.RegularPages }}
+  {{ end }}
+  {{ if not $pages }}
+    {{ $pages = $context.Data.Pages }}
+  {{ end }}
+  {{ if not $pages }}
+    {{ $pages = $context.Pages }}
+  {{ end }}
+  {{ if not $pages }}
+    {{ $pages = $context.Data.Terms }}
+  {{ end }}
+  {{ if not $pages }}
+    {{ $pages = $context.Site.Data.Pages }}
+  {{ end }}
+
+  {{ if not $pages }}
+    <!-- Did not find content. -->
+    {{ if or $taxonomy (eq $context.Kind "taxonomy") }}
+      {{ $pages = where $context.Site.RegularPages "Name" $taxonomy }}
+    {{ end }}
+    {{ if or $term (eq $context.Kind "term") }}
+      {{ $pages = where $context.Site.RegularPages "Name" $term }}
+    {{ end }}
+  {{ end }}
+
+  {{ $sort := "" }}
+  {{ $show_ordinal := "" }}
+  {{ if and $pages $term }}
+    {{ range (where $context.Site.Pages "Name" $term) }}
+      {{ if .Parent.Param "sort" }}
+        {{ $sort = .Parent.Param "sort" }}
+      {{ end }}
+      {{ if .Parent.Param "show-ordinal" }}
+        {{ $show_ordinal = .Parent.Param "show-ordinal" }}
+      {{ end }}
+      {{ if .Parent.Param "show_ordinal" }}
+        {{ $show_ordinal = .Parent.Param "show_ordinal" }}
+      {{ end }}
+    {{ end }}
+    {{ if $sort }}
+      {{ $pages = $pages.ByParam $sort }}
+    {{ end }}
+  {{ end }}
+
+  {{ if $pages }}
+    <div style="clear: both;"></div>
+    <div>
+      {{ if $context.Param "relatedTitle" }}
+        <h3>{{ $context.Param "relatedTitle" }}</h3>
+      {{ else if $context.Parent.Param "relatedTitle" }}
+        <h3>{{ $context.Parent.Param "relatedTitle" }}</h3>
+      {{ end }}
+
+
+      <ul
+        class="articles summary-{{ default "default" $context.Params.summary }} summary-{{ default "default" $context.Params.summary }}s {{ $context.Type }} {{ $context.Kind }} {{ $context.Section }}  "
+      >
+        {{ $counter := 0 }}
+        {{ $featured := "" }}
+
+        {{ range $pages }}
+          {{ $show := true }}
+          {{ if or (eq .Type "gallery") (eq .Type "gallery-image") }}
+            {{ if not (.Resources.ByType "image") }}
+              <!-- If this is a gallery type, show the summary -->
+              {{ $show = false }}
+            {{ end }}
+          {{ end }}
+          {{ if $show }}
+            {{ $counter = add $counter 1 }}
+            <li class="article-summary-item {{ $featured }}">
+              {{ partial "article/summary.html" (dict "context" . "counter" $counter "show_ordinal" $show_ordinal) }}
+            </li>
+          {{ end }}
+          {{ $featured = "" }}
+        {{ end }}
+      </ul>
+    </div>
+  {{ end }}
+
+{{ end }}

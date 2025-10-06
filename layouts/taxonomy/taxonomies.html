@@ -1,0 +1,9 @@
+{{ partial "website/header.html" . }}
+
+{{ $page := . }}
+{{ $term := strings.TrimRight "s" .Type }}
+{{ $keyword := urlize .Name }}
+
+{{ partial "taxonomy/related.html" (dict "context" . "page" $page "kind" .Kind "term" $term "terms" .Type "keyword" $keyword ) }}
+
+{{ partial "website/footer.html" . }}

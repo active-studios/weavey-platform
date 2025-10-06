@@ -1,0 +1,179 @@
+{{ $title := "" }}
+{{ $subtitle := "" }}
+
+{{ $url := "" }}
+{{ if .link }}
+  {{ $url = .link }}
+{{ else if .url }}
+  {{ $url = .url }}
+{{ end }}
+
+{{ $context := slice }}
+{{ $page := slice }}
+{{ if .page }}
+  {{ $page = .page }}
+{{ end }}
+{{ if .context }}
+  {{ $context = .context }}
+{{ end }}
+
+{{ $method := slice }}
+{{ if $page }}
+  {{ $method = $page }}
+{{ else if $context }}
+  {{ $method = $context }}
+{{ end }}
+{{ if not $url }}
+  {{ if $method }}
+    {{ $url = $method.RelPermalink }}
+  {{ end }}
+  {{ if $page }}
+    {{ $url = $page.RelPermalink }}
+  {{ end }}
+  {{ if eq $context $page }}
+    {{ $url = "" }}
+  {{ end }}
+{{ end }}
+
+{{ $level := .level }}
+{{ if not $level }}
+  {{ $level = 3 }}
+{{ end }}
+{{ if not $level }}
+  {{ $level = 0 }}
+{{ end }}
+{{ $counter := 0 }}
+{{ if .counter }}
+  {{ $counter = .counter }}
+{{ end }}
+
+{{ if .title }}
+  {{ $title = .title }}
+{{ else if $page }}
+  {{ $title = $page.Title }}
+{{ else if $context }}
+  {{ $title = $context.Title }}
+{{ end }}
+{{ if .subtitle }}
+  {{ $subtitle = .subtitle }}
+{{ end }}
+{{ $icon := "" }}
+{{ if .icon }}
+  {{ $icon = .icon }}
+{{ end }}
+
+
+<div class="title-block">
+  {{ if or $page $context $icon }}
+    {{ if $page }}
+      {{ $icon = $page.Params.icon }}
+    {{ else if $context }}
+      {{ $icon = $context.Params.icon }}
+    {{ end }}
+    {{ if $icon }}
+      {{ $iconclass := "icon-size-3" }}
+      {{ if eq $level 2 }}
+        {{ $iconclass = "icon-size-2" }}
+      {{ end }}
+      {{ if eq $level 1 }}
+        {{ $iconclass = "icon-size-1" }}
+      {{ end }}
+      {{ if $method }}
+        {{ $url = $method.RelPermalink }}
+        <div class="icon {{ $iconclass }}">
+          {{ if or (eq $method.Kind "taxonomy") (eq $method.Kind "term") }}
+            <a {{ if $url }}href="{{ $url }}"{{ end }}>
+              <i class="fa fa-{{ $icon }}"></i>
+            </a>
+          {{ end }}
+        </div>
+      {{ else }}
+        <div class="icon {{ $iconclass }}">
+          <i class="fa fa-{{ $icon }}"></i>
+        </div>
+      {{ end }}
+    {{ end }}
+  {{ end }}
+
+  {{ if $page }}
+    {{ if not $subtitle }}
+      {{ $subtitle = $page.Param "subtitle" }}
+    {{ end }}
+  {{ end }}
+  {{ if $title }}
+    {{ $titles := split $title "(" }}
+    {{ $title = index $titles 0 }}
+    {{ if not $subtitle }}
+      {{ $subtitle = replace (index $titles 1) ")" "" }}
+    {{ end }}
+  {{ end }}
+
+
+  <div class="title-wrapper">
+    {{ if and $counter }}
+      <div class="counter-box">
+        {{ $counter }}
+      </div>
+    {{ end }}
+
+
+    <div class="title-with-subtitle">
+      {{ if eq $level 1 }}
+        <div class="h2base">
+          {{ if $title }}
+            <a class="primary" {{ if $url }}href="{{ $url }}"{{ end }}>
+              <h1>
+                {{ $title }}
+                {{/*  {{ if $context.Param "reviews" }}
+                  {{ $someVar2 := printf "%s" (index ($context.Param "reviews") 0) | printf "%s" }}
+                  {{ $page2 := site.GetPage ($someVar2) }}
+                  {{ with $page2 }}
+                    {{ partial "social/review.html"  (dict "context" . "page" $page "showIcon" true ) }}
+                  {{ end }}
+                {{ end }}  */}}
+              </h1>
+            </a>
+          {{ end }}
+          {{ if $subtitle }}
+            <h2>
+              {{ $subtitle }}
+            </h2>
+          {{ end }}
+        </div>
+      {{ end }}
+      {{ if eq $level 2 }}
+        <div class="h2base">
+          {{ if $title }}
+            <a class="alternative" {{ if $url }}href="{{ $url }}"{{ end }}>
+              <h2>
+                {{ $title }}
+              </h2>
+            </a>
+          {{ end }}
+          {{ if $subtitle }}
+            <h3>
+              {{ $subtitle }}
+            </h3>
+          {{ end }}
+        </div>
+      {{ end }}
+
+      {{ if eq $level 3 }}
+        <div class="h3base">
+          {{ if $title }}
+            <a class="alternative" {{ if $url }}href="{{ $url }}"{{ end }}>
+              <h3>
+                {{ $title }}
+              </h3>
+            </a>
+          {{ end }}
+          {{ if $subtitle }}
+            <h4>
+              {{ $subtitle }}
+            </h4>
+          {{ end }}
+        </div>
+      {{ end }}
+    </div>
+  </div>
+</div>

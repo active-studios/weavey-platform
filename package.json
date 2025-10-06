@@ -1,0 +1,30 @@
+{
+  "name": "weaver-platform",
+  "version": "1.0.0",
+  "description": "TBD",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm run e2e-all",
+    "e2e-all": "npm run e2e-chrome && npm run e2e-firefox && npm run e2e-edge",
+    "e2e-chrome": "npx cypress run --browser chrome",
+    "e2e-edge": "npx cypress run --browser edge",
+    "e2e-firefox": "npx cypress run --browser firefox"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/active-studios/weaver-platform.git"
+  },
+  "author": "Designed lovingly by ActiveStudios.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/active-studios/weaver-platform/issues"
+  },
+  "homepage": "https://github.com/active-studios/weaver-platform#readme",
+  "devDependencies": {
+    "@types/chai": "^5.0.1",
+    "cypress": "^14.0.2",
+    "prettier": "^3.4.2",
+    "prettier-plugin-go-template": "^0.0.15",
+    "typescript": "^5.7.3"
+  }
+}

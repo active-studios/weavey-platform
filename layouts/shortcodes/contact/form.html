@@ -1,0 +1,134 @@
+<div class="contact-form kwes-form">
+  {{- if hugo.IsProduction | or (eq site.Params.env "production") -}}
+  {{- else -}}
+    {{/* <div class="warning">
+      <h2><i class="fas fa-exclamation-triangle"></i></h2>
+      <p>This form is running in development mode.</p>
+      </div>
+    */}}
+  {{- end -}}
+
+
+  <form
+    id="contact-form"
+    method="POST"
+    action="https://api.web3forms.com/submit"
+  >
+    {{ if $.Site.Params.Web3FormsAccessKey }}
+      <input
+        type="hidden"
+        name="access_key"
+        value="{{ $.Site.Params.Web3FormsAccessKey }}"
+      />
+    {{ end }}
+    <fieldset>
+      <legend>Full Name:</legend>
+      <div class="field-control">
+        <label for="name">First Name</label>
+        <input type="text" name="first-name" id="first-name" rules="required" />
+      </div>
+      <div class="field-control">
+        <label for="name">Last Name</label>
+        <input type="text" name="last-name" id="last-name" rules="required" />
+      </div>
+    </fieldset>
+    <fieldset>
+      <legend>Address:</legend>
+      <div class="field-control">
+        <label for="email">City, State</label>
+        <input
+          type="text"
+          name="city"
+          id="city"
+          rules="required|city|max:255"
+        />
+      </div>
+      <div class="field-control">
+        <label for="email">E-mail Address</label>
+        <input
+          type="text"
+          name="email"
+          id="email"
+          rules="required|email|max:255"
+        />
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Message:</legend>
+      <div class="field-control wide">
+        <label for="subject">Subject</label>
+        <input
+          type="text"
+          name="subject"
+          id="subject"
+          rules="required|max:255"
+        />
+      </div>
+      <div class="field-control wide">
+        <br /><br />
+        <label for="message"
+          >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label
+        >
+        <textarea name="message" id="message" rules="required"></textarea>
+      </div>
+    </fieldset>
+
+    <!-- Honeypot Spam Protection -->
+    <input
+      type="checkbox"
+      name="botcheck"
+      class="hidden"
+      style="display: none;"
+    />
+
+    <!-- Custom Confirmation / Success Page -->
+    <!-- <input type="hidden" name="redirect" value="https://mywebsite.com/thanks.html"> -->
+
+    {{ if .Site.Params.GoogleRecaptchaV3ApiKey }}
+      <div
+        class="g-recaptcha"
+        data-sitekey="{{ .Site.Params.GoogleRecaptchaV3ApiKey }}"
+      ></div>
+    {{ else if .Site.Params.GoogleRecaptchaV2ApiKey }}
+      <div
+        class="g-recaptcha"
+        data-sitekey="{{ .Site.Params.GoogleRecaptchaV2ApiKey }}"
+      ></div>
+    {{ else }}
+      <input type="submit" value="Submit" disabled data-reason="No API Key" />
+      <span
+        title="Google Recaptcha API key is not set. Please set it in the site
+        configuration."
+        >&nbsp;<i class="fas fa-bug"></i
+      ></span>
+    {{ end }}
+
+    {{ if .Site.Params.GoogleRecaptchaV2ApiKey }}
+      <script type="text/javascript">
+        var onloadCallback = function () {
+          console.warn("grecaptcha is ready!");
+        };
+      </script>
+
+      <!-- v2 https://developers.google.com/recaptcha/docs/display -->
+      <input type="submit" value="Submit" />
+    {{ end }}
+    {{ if .Site.Params.GoogleRecaptchaV3ApiKey }}
+      <button
+        class="g-recaptcha"
+        data-sitekey="KEY_ID"
+        data-callback="onSubmit"
+        data-action="submit"
+      >
+        Submit
+      </button>
+    {{ end }}
+  </form>
+
+  <script>
+    function onSubmit(token) {
+      document.getElementById("contact-form").submit();
+    } // Use `requestSubmit()` for extra features like browser input validation.
+  </script>
+</div>

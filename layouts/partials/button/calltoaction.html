@@ -1,0 +1,11 @@
+<div class="call-to-action-container">
+  <a class="{{ .class }}" {{ if .link }}href="{{ .link }}"{{ end }}>
+    {{ if .icon }}
+      <div class="icon"><i class="fa-solid fa-{{ .icon }}"></i></div>
+    {{ end }}
+    {{ .title | markdownify }}
+    <span class="arrow">
+      {{/* &#9654; */}}
+    </span>
+  </a>
+</div>

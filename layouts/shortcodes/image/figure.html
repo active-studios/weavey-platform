@@ -1,0 +1,22 @@
+{{- $src := .Get "src" -}}
+{{- $link := .Get "link" -}}
+{{- $caption := .Get "caption" -}}
+{{- $class := .Get "class" -}}
+
+{{ $captionId := printf "caption-%s" ($caption | md5) }}
+
+
+<div style="width: 100%; overflow: hidden;">
+  <figure role="group" aria-describedby="{{ $captionId }}">
+    {{ if $link }}
+      <a href="{{ $link }}" style="max-width: 100%;" class="">
+        <img src="{{ $src }}" />
+      </a>
+    {{ else }}
+      <img src="{{ $src }}" style="max-width: 100%;" class="" />
+    {{ end }}
+    <figcaption id="{{ $captionId }}" style="text-align: center;">
+      {{ $caption | markdownify }}
+    </figcaption>
+  </figure>
+</div>

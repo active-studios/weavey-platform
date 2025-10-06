@@ -1,0 +1,50 @@
+{{ define "page" }}
+  {{ partial "website/header.html" . }}
+  {{ $page := . }}
+
+
+  <main
+    class="taxonomy list {{ urlize .Title }} {{ urlize .Type }} kind-{{ urlize .Kind }} section-{{ urlize .Section }} weaver-platform-default"
+  >
+    <section class="taxonomy list weaver-platform-default">
+      <article class="container taxonomy list weaver-platform-default">
+        {{ partial "nav/breadcrumbs.html" . }}
+
+
+        <div>
+          <div class="photos">
+            {{ $page := . }}
+            {{ if .Resources }}
+              {{ range .Resources.ByType "image" }}
+                <aside class="photo">
+                  {{ with .Resize "1000x" }}
+                    {{ partial "gallery/thumb.html" (dict "context" . "keyword" .Name "page" $page ) }}
+                  {{ end }}
+                </aside>
+              {{ end }}
+            {{ end }}
+          </div>
+
+          {{ if not (strings.Contains .Content "<h1") }}
+            <h1 id="{{ urlize .Title }}" class="taxonomy-list">{{ .Title }}</h1>
+          {{ end }}
+          {{ partial "core/columns.html" . }}
+        </div>
+      </article>
+      <div class="for-more">
+        {{ if eq .Kind "taxonomy" }}
+          {{ $taxonomy := urlize .Name }}
+          {{ $term := "interior-design" }}
+          {{ partial "taxonomy/related.html" (dict "context" . "page" $page "kind" .Kind "taxonomy" $taxonomy) }}
+        {{ else }}
+          <h2>Unsure how to list {{ .Kind }}</h2>
+        {{ end }}
+      </div>
+    </section>
+  </main>
+
+  {{- if and (not hugo.IsProduction) (ne site.Params.env "production") -}}
+    <div class="debug">TAXONOMY LIST</div>
+  {{ end }}
+  {{ partial "website/footer.html" . }}
+{{ end }}

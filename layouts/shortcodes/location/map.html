@@ -1,0 +1,261 @@
+{{ $Analytics := "" }}
+{{ $MapsApiKey := .Site.Params.GoogleMapsApiKey }}
+{{ if not $MapsApiKey }}
+  {{ if and site.Params site.Params.api site.Params.api.google }}
+    {{ with site.Params.api.google }}
+      {{ with (index . 0) }}
+        {{ if .Analytics }}
+          {{ $Analytics = .Analytics }}
+        {{ end }}
+        {{ if .MapsApiKey }}
+          {{ $MapsApiKey = .MapsApiKey }}
+        {{ end }}
+      {{ end }}
+    {{ end }}
+  {{ end }}
+{{ end }}
+
+{{ if $MapsApiKey }}
+  <div class="contact-map">
+    {{- if hugo.IsProduction | or (eq site.Params.env "production") -}}
+    {{- else -}}
+      <div class="warning" style="float: right;">
+        <div style="position: absolute; height: 0;">
+          <div style="float: right; position: relative; top: -10px; right: -50px;">
+            {{/*  <span
+              title="This map is running in development mode."
+              >&nbsp;<i class="fas fa-exclamation-triangle"></i
+            ></span>  */}}
+            </div>
+          </div>
+      </div>
+    {{- end -}}
+
+        <script
+        (g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})({
+            key: "{{ $MapsApiKey }}",
+            v: "weekly",
+            // Use the 'v' parameter to indicate the version to use (weekly, beta, alpha, etc.).
+            // Add other bootstrap parameters as needed, using camel case.
+        });
+        </script>
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key={{ $MapsApiKey }}&callback=initMap&v=weekly"
+      defer
+    ></script>
+
+    {{ $geopoi := "Service Area" }}
+    {{ $geolat := 47.610378 }}
+    {{ $geolng := -122.2015 }}
+    {{ $georadius := 20000 }}
+    {{ $geotype := "GeoCircle" }}
+    {{ $geojson := "" }}
+    {{ with site.Data }}
+      {{ with .ld }}
+        {{ with .organization }}
+          {{ with .areaServed }}
+            {{ $geopoi = .name }}
+            {{ $georadius = .geoRadius }}
+            {{ if index . "@type" }}
+              {{ $geotype = (index . "@type") }}
+            {{ end }}
+            {{ with .geoMidpoint }}
+              {{ $geolat = .latitude }}
+              {{ $geolng = .longitude }}
+            {{ end }}
+          {{ end }}
+        {{ end }}
+      {{ end }}
+      {{/*  {{ with .geojson }}
+        {{ if (index . "king-county") }}
+          {{ $geojson = (index . "king-county") }}
+          {{ $geotype = "GeoJSON" }}
+        {{ end }}
+      {{ end }}  */}}
+    {{ end }}
+
+    <input type="hidden" id="geopoi" value="{{ $geopoi }}" />
+    <input type="hidden" id="geolat" value="{{ $geolat }}" />
+    <input type="hidden" id="geolng" value="{{ $geolng }}" />
+    <input type="hidden" id="geotype" value="{{ $geotype }}" />
+    <input type="hidden" id="georadius" value="{{ $georadius }}" />
+    <input type="hidden" id="geojson" value="{{ $geojson }}" />
+
+    <script>
+      let map;
+
+      let callToActionColor = "#FF0000";
+
+      async function initMap() {
+        const google = window.google;
+        if (!google) {
+          console.error('Google not defined?')
+          return
+        }
+        const styledMapType = new google.maps.StyledMapType(
+          [
+            { elementType: "geometry", stylers: [{ color: "#ebe3cd" }] },
+            {
+              elementType: "labels.text.fill",
+              stylers: [{ color: "#523735" }],
+            },
+            {
+              elementType: "labels.text.stroke",
+              stylers: [{ color: "#f5f1e6" }],
+            },
+            {
+              featureType: "administrative",
+              elementType: "geometry.stroke",
+              stylers: [{ color: "#c9b2a6" }],
+            },
+            {
+              featureType: "administrative.land_parcel",
+              elementType: "geometry.stroke",
+              stylers: [{ color: "#dcd2be" }],
+            },
+            {
+              featureType: "administrative.land_parcel",
+              elementType: "labels.text.fill",
+              stylers: [{ color: "#ae9e90" }],
+            },
+            {
+              featureType: "landscape.natural",
+              elementType: "geometry",
+              stylers: [{ color: "#dfd2ae" }],
+            },
+            {
+              featureType: "poi",
+              elementType: "geometry",
+              stylers: [{ color: "#dfd2ae" }],
+            },
+            {
+              featureType: "poi",
+              elementType: "labels.text.fill",
+              stylers: [{ color: "#93817c" }],
+            },
+            {
+              featureType: "poi.park",
+              elementType: "geometry.fill",
+              stylers: [{ color: "#a5b076" }],
+            },
+            {
+              featureType: "poi.park",
+              elementType: "labels.text.fill",
+              stylers: [{ color: "#447530" }],
+            },
+            {
+              featureType: "road",
+              elementType: "geometry",
+              stylers: [{ color: "#f5f1e6" }],
+            },
+            {
+              featureType: "road.arterial",
+              elementType: "geometry",
+              stylers: [{ color: "#fdfcf8" }],
+            },
+            {
+              featureType: "road.highway",
+              elementType: "geometry",
+              stylers: [{ color: "#f8c967" }],
+            },
+            {
+              featureType: "road.highway",
+              elementType: "geometry.stroke",
+              stylers: [{ color: "#e9bc62" }],
+            },
+            {
+              featureType: "road.highway.controlled_access",
+              elementType: "geometry",
+              stylers: [{ color: "#e98d58" }],
+            },
+            {
+              featureType: "road.highway.controlled_access",
+              elementType: "geometry.stroke",
+              stylers: [{ color: "#db8555" }],
+            },
+            {
+              featureType: "road.local",
+              elementType: "labels.text.fill",
+              stylers: [{ color: "#806b63" }],
+            },
+            {
+              featureType: "transit.line",
+              elementType: "geometry",
+              stylers: [{ color: "#dfd2ae" }],
+            },
+            {
+              featureType: "transit.line",
+              elementType: "labels.text.fill",
+              stylers: [{ color: "#8f7d77" }],
+            },
+            {
+              featureType: "transit.line",
+              elementType: "labels.text.stroke",
+              stylers: [{ color: "#ebe3cd" }],
+            },
+            {
+              featureType: "transit.station",
+              elementType: "geometry",
+              stylers: [{ color: "#dfd2ae" }],
+            },
+            {
+              featureType: "water",
+              elementType: "geometry.fill",
+              stylers: [{ color: "#b9d3c2" }],
+            },
+            {
+              featureType: "water",
+              elementType: "labels.text.fill",
+              stylers: [{ color: "#92998d" }],
+            },
+          ],
+          { name: document.querySelector("#geopoi").value },
+        );
+
+        // Create a map object, and include the MapTypeId to add
+        // to the map type control.
+        const map = new google.maps.Map(document.getElementById("map"), {
+          center: {
+            lat: parseFloat(document.querySelector("#geolat").value),
+            lng: parseFloat(document.querySelector("#geolng").value),
+          },
+          zoom: 9,
+          mapTypeControlOptions: {
+            mapTypeIds: ["styled_map"],
+          },
+        });
+
+        if (document.querySelector("#geotype")?.value == "GeoCircle") {
+          const cityCircle = new google.maps.Circle({
+            strokeColor: "#6D888D",
+            strokeOpacity: 0.9,
+            strokeWeight: 8,
+            fillColor: "#CEE0DB",
+            fillOpacity: 0.5,
+            map,
+            center: {
+              lat: parseFloat(document.querySelector("#geolat").value),
+              lng: parseFloat(document.querySelector("#geolng").value),
+            },
+            radius: parseFloat(document.querySelector("#georadius").value),
+          });
+        }
+
+        //Associate the styled map with the MapTypeId and set it to display.
+        map.mapTypes.set("styled_map", styledMapType);
+        map.setMapTypeId("styled_map");
+      }
+
+      initMap();
+    </script>
+    <div id="map"></div>
+  </div>
+{{ else }}
+ <div class="error">
+      <span
+        title="Google Recaptcha API key is not set.
+        Please set it in the site configuration."
+        >&nbsp;<i class="fas fa-bug"></i
+      ></span>
+  </div>
+{{ end }}

@@ -1,0 +1,691 @@
+{{ define "page" }}
+
+  {{ partial "website/header.html" . }}
+
+  <main class="gallery-list {{ urlize .Title }} {{ urlize .Type }} kind-{{ urlize .Kind }} section-{{ urlize .Section }} weaver-platform-default">
+
+    <section class="gallery-list weaver-platform-default" >
+      <article class="container gallery-list weaver-platform-default">
+        <div>
+          {{ partial "nav/breadcrumbs.html" . }}
+
+          <a name="top"></a>
+
+          {{ if not (strings.Contains .Content "<h1") }}
+            {{ partial "core/title.html" (dict "page" . "context" . "level" 1 )}}
+          {{ end }}
+
+          <div class="masonry-gallery show-sidebar">
+
+            {{ $featured := "" }}
+            <div class="masonry-grid use-flex" id="masonry-gallery-{{ .Kind }}">
+              {{ $page := . }}
+
+              {{ $pages := .Pages }}
+
+              {{ if not $pages }}
+              {{ $pages = .RegularPages }}
+              {{ end }}
+              {{ if not $pages }}
+              {{ $pages = .Data.Pages }}
+              {{ end }}
+              {{ if not $pages }}
+              {{ $pages = .Data.Terms.ByCount }}
+              {{ end }}
+
+              {{ if $pages}}
+                {{ $count := 0}}
+                {{ range $pages }}
+                  {{ $show := true }}
+                  {{ $featured = "" }}
+                  {{ if in .Page.Params.tags "featured" }}
+                    {{ $featured = "featured" }}
+                  {{ end }}
+                  {{ if in .Page.Params.tags "panorama-wide" }}
+                    {{ $featured = "panorama-wide" }}
+                  {{ end }}
+                  {{ if in .Page.Params.tags "panorama-tall" }}
+                    {{ $featured = "panorama-tall" }}
+                  {{ end }}
+                  {{ if .Resources.ByType "image" }}
+                    {{ $resized := ""}}
+                    {{ $thumb := ""}}
+                    {{ $image := . }}
+                    {{ range .Params.Resources }}
+                      {{ if not $thumb }}
+                        {{ $tags := . }}
+                        {{ range $image.Resources.ByType "image" }}
+                          {{ with .Resize "1000x" }}
+                            {{ if not $thumb }}
+                              {{ $src := strings.Replace $tags.src "%20" " " }}
+                              {{ if in $tags.tags "thumb" }}
+                                {{ if in .Permalink $src}}
+                                  {{ $thumb = . }}
+                                {{ else if in .RelPermalink $src }}
+                                  {{ $thumb = . }}
+                                {{ else if in .Name  $src }}
+                                  {{ $thumb = . }}
+                                {{ else if eq .Name  $src }}
+                                  {{ $thumb = . }}
+                                {{ end }}
+                              {{ end }}
+                            {{ end }}
+                          {{ end }}
+                        {{ end }}
+                        {{ range $image.Resources.ByType "image" }}
+                          {{ with .Resize "1000x" }}
+                            {{ if not $thumb }}
+                              {{ if in $tags.tags "featured"}}
+                                {{ if in .Permalink $tags.src}}
+                                  {{ $thumb = . }}
+                                {{ else if in .RelPermalink  $tags.src }}
+                                  {{ $thumb = . }}
+                                {{ end }}
+                              {{ end }}
+                            {{ end }}
+                            {{ end }}
+                          {{ end }}
+                          {{ range $image.Resources.ByType "image" }}
+                            {{ if in $tags.tags "panorama-wide" }}
+                              {{ if and (gt .Width 1200) (gt .Width (mul .Height 3.5 )) }}
+                                {{ $featured = "panorama-wide" }}
+                              {{ end }}
+                            {{ end }}
+                            {{ if in $tags.tags "panorama-tall" }}
+                              {{ if and (gt .Height 1200) (gt .Height (mul .Width 3.5 )) }}
+                                {{ $featured = "panorama-tall" }}
+                              {{ end }}
+                            {{ end }}
+                        {{ end }}
+                      {{ end }}
+                    {{ end }}
+                    {{ range .Params.Resources }}
+                      {{ if not $thumb }}
+                        {{ $tags := . }}
+                        {{ range $page.Resources.ByType "image" }}
+
+                          {{ if in $tags.tags "featured"}}
+                              {{ if in .Permalink  $tags.src}}
+                                {{ $thumb = . }}
+                              {{ else if in .RelPermalink  $tags.src }}
+                                {{ $thumb = . }}
+                              {{ end }}
+                            {{ end }}
+                          {{ end }}
+                          {{ if in $tags.tags "panorama-wide" }}
+                            {{ if and (gt .Width 1200) (gt .Width (mul .Height 3.5 )) }}
+                              {{ $featured = "panorama-wide" }}
+                            {{ end }}
+                          {{ end }}
+                          {{ if in $tags.tags "panorama-tall" }}
+                            {{ if and (gt .Height 1200) (gt .Height (mul .Width 3.5 )) }}
+                              {{ $featured = "panorama-tall" }}
+                            {{ end }}
+                        {{ end }}
+                      {{ end }}
+                    {{ end }}
+                    {{ range .Resources.ByType "image" }}
+                      {{ if not $thumb }}
+                        {{ if gt .Width 1300 }}
+                          {{ with .Resize "1300x" }}
+                              {{ $resized = "1300x"}}
+                              {{ $thumb = . }}
+                          {{ end }}
+                        {{ else if gt .Width 1000 }}
+                          {{ with .Resize "1000x" }}
+                              {{ $resized = "1000x"}}
+                              {{ $thumb = . }}
+                              {{ $featured = "1000x" }}
+                          {{ end }}
+                        {{ else if gt .Width 800 }}
+                          {{ with .Resize "800x" }}
+                              {{ $resized = "800x"}}
+                              {{ $thumb = . }}
+                              {{ $featured = "small" }}
+                          {{ end }}
+                        {{ else if gt .Width 600 }}
+                          {{ with .Resize "600x" }}
+                              {{ $resized = "600x"}}
+                              {{ $thumb = . }}
+                              {{ $featured = "small" }}
+                          {{ end }}
+                        {{ else if gt .Width 400 }}
+                            {{ $resized = "400x"}}
+                            {{ $thumb = . }}
+                            {{ $featured = "tiny" }}
+                            {{ if or hugo.IsProduction (eq site.Params.env "production") }}
+                              {{ $show = false }}
+                            {{ end }}
+                        {{ else }}
+                          {{ $featured = "tiny" }}
+                          {{ $thumb = . }}
+                          {{ if or hugo.IsProduction (eq site.Params.env "production") }}
+                            {{ $show = false }}
+                          {{ end }}
+                        {{ end }}
+                      {{ end }}
+
+                      {{ if and (gt .Width 1200) (gt .Width (mul .Height 3.5 )) }}
+                        {{ $featured = "panorama-wide" }}
+                      {{ end }}
+                      {{ if and (gt .Height 1200) (gt .Height (mul .Width 3.5 )) }}
+                        {{ $featured = "panorama-tall" }}
+                      {{ end }}
+                    {{ end }}
+                    {{ if and $show $thumb }}
+                    {{ $tags := slice }}
+                    {{ $item := .}}
+                    {{ range $key, $value := $item.Params }}
+                        {{ with $item.GetTerms $key }}
+                          {{ range . }}
+                            {{ $tags = $tags | append (urlize .Name) }}
+                          {{ end }}
+                        {{ end}}
+                    {{ end }}
+                    {{ $classes := trim ($tags | printf "%s%s" $tags | printf "%s") "[]" }}
+                    {{ $classes = replace $classes "[" " " }}
+                    {{ $classes = replace $classes "]" " " }}
+                    {{ $title := .Title }}
+                    <div class="masonry-tile {{ $featured }} gallery-tile {{ $classes }} use-flex" data-resized="{{ $resized }}" >
+                        <div class="masonry-tile-inner1">
+                          <div class="masonry-tile-inner2 b-1">
+                              {{ $keyword := "foo" }}
+                              {{ $gallerypage := . }}
+                              {{ if .Resources.ByType "image" }}
+                                {{ if $thumb }}
+                                  {{ partial "gallery/thumb.html" (dict "context" $thumb "keyword" $keyword "page" $gallerypage "kind" $gallerypage.Parent.Kind "terms" $tags "show" true ) }}
+                                {{ end }}
+                              {{ else }}
+                                <div style="background: #fff; color: red;">
+                                  File not found.
+                                </div>
+                              {{ end }}
+
+                              {{ range .Resources }}
+                                {{ if gt .Width 1300 }}
+                                  {{ with .Resize "1300x" }}
+                                      {{ $resized = "1300x"}}
+                                      {{ $thumb = . }}
+                                  {{ end }}
+                                {{ else if gt .Width 1000 }}
+                                  {{ with .Resize "1000x" }}
+                                      {{ $resized = "1000x"}}
+                                      {{ $thumb = . }}
+                                      {{ $featured = "small" }}
+                                  {{ end }}
+                                {{ else if gt .Width 600 }}
+                                  {{ with .Resize "600x" }}
+                                      {{ $resized = "600x"}}
+                                      {{ $thumb = . }}
+                                      {{ $featured = "small" }}
+                                  {{ end }}
+                                {{ else if gt .Width 400 }}
+                                    {{ $resized = "400x"}}
+                                    {{ $thumb = . }}
+                                    {{ $featured = "tiny" }}
+                                    {{ if or hugo.IsProduction (eq site.Params.env "production") }}
+                                      {{ $show = false }}
+                                    {{ end }}
+                                {{ else }}
+                                  {{ $featured = "tiny" }}
+                                  {{ $thumb = . }}
+                                  {{ if or hugo.IsProduction (eq site.Params.env "production") }}
+                                    {{ $show = false }}
+                                  {{ end }}
+                                {{ end }}
+
+                                {{ if and (gt .Width 1200) (gt .Width (mul .Height 3.5 )) }}
+                                  {{ $featured = "panorama-wide" }}
+                                {{ end }}
+                                {{ if and (gt .Height 1200) (gt .Height (mul .Width 3.5 )) }}
+                                  {{ $featured = "panorama-tall" }}
+                                {{ end }}
+
+                                {{ $imagetitle := ""}}
+                                {{ $imagetags := slice }}
+                                {{ $resources := $gallerypage.Param "resources"}}
+                                {{ with $resources }}
+                                  {{ range . }}
+                                    {{ $r := . }}
+                                    {{ if in $thumb .src }}
+                                      {{ range $key, $value := . }}
+                                        {{ if eq $key "description"}}
+                                          {{ $imagetitle = $value }}
+                                        {{ else if eq $key "src"}}
+                                        {{ else }}
+                                          {{ if $value }}
+                                            {{ $imagetags = $imagetags | append $value }}
+                                          {{ end }}
+                                        {{ end }}
+                                      {{ end }}
+                                    {{ end }}
+                                  {{ end }}
+                                {{ end }}
+                                {{ $imagetagsclasses := trim ($imagetags | printf "%s%s" $imagetags | printf "%s") "][]" }}
+                                {{ $imagetagsclasses = replace $imagetagsclasses "[" " " }}
+                                {{ $imagetagsclasses = replace $imagetagsclasses "]" " " }}
+                                {{ if and $thumb $imagetags }}
+                                  {{ partial "gallery/thumb.html" (dict "context" $thumb "keyword" $keyword "page" $gallerypage "kind" $gallerypage.Parent.Kind "classes" $imagetagsclasses "show" false) }}
+                                {{ else if $imagetags }}
+                                  <div style="background: #fff; color: red;">
+                                    File not found. {{ $thumb.RelPermalink }}
+                                  </div>
+                                {{ end }}
+                              {{ end }}
+
+                              <!-- if we can't find the image, look for -->
+                              <!-- an image file with the same base name -->
+                              <!-- as this page. -->
+                            </div>
+                          </div>
+                        <div class="masonry-tile-title">
+                          {{ $titles := split $title "("}}
+                          <div class="tile-title">{{ index $titles 0 }}
+                            <div class="tile-subtitle">{{ replace (index $titles 1) ")" "" }}</div>
+                          </div>
+                        </div>
+                      </div>
+                    {{ end }}
+                  {{ else }}
+                    <!-- image too small -->
+                  {{ end}}
+                {{ end}}
+              {{ else }}
+
+                  {{ $count := 0}}
+                  {{ range .Resources }}
+                    {{ $featured = "" }}
+                    {{ $image := . }}
+                    {{ $ext := ".md" }}
+                    {{ $rootname := strings.TrimSuffix (path.Ext .Name) .Name }}
+                    {{ $rootname  := printf "%s" $ext | printf "%s%s" $rootname | printf "%s" }}
+                    {{ if $rootname }}
+                      {{ $image := . }}
+                      {{ with $.Site.GetPage $rootname }}
+                        {{ $featured = "" }}
+                        {{ if gt $image.Width 1000 }}
+                          {{ with $page.Params }}
+                            {{ range .Resources }}
+                              {{ if in $image.Permalink .src }}
+                                {{ $featured = "featured" }}
+                              {{ end }}
+                            {{ end }}
+                          {{ end }}
+                          {{ if in .Page.Params.tags "featured" }}
+                            {{ $featured = "featured" }}
+                          {{ end }}
+                          {{ if in .Page.Params.tags "panorama-wide" }}
+                            {{ $featured = "panorama-wide" }}
+                          {{ end }}
+                          {{ if and (gt $image.Width 1200) (gt $image.Width (mul $image.Height 3.5 )) }}
+                            {{ $featured = "panorama-wide" }}
+                          {{ end }}
+                          {{ if in .Page.Params.tags "panorama-tall" }}
+                            {{ $featured = "panorama-tall" }}
+                          {{ end }}
+                          {{ if and (gt $image.Height 1000) (gt $image.Height (mul $image.Width 3.5 )) }}
+                            {{ $featured = "panorama-tall" }}
+                          {{ end }}
+
+                          <div class="masonry-tile masnonry-tile-resource {{ $featured }} show use-flex">
+                            <div class="masonry-tile-inner1">
+                              <div class="masonry-tile-inner2 b-2">
+                                {{ if or (strings.Contains  $image.Permalink "jpeg") (strings.Contains $image.Permalink "jpg") }}
+                                  <figure class="gallery-thumb">
+                                      {{ with $image.Resize "1000x" }}
+                                        {{ with .Resize "1000x" }}
+                                          {{ partial "gallery/thumb.html" (dict "context" . "keyword" .Name "page" $page "kind" $page.Kind  ) }}
+                                        {{ end }}
+                                      {{ end }}
+                                    <figcaption>{{ .Page.Description }}</figcaption>
+                                  </figure>
+                                {{ else if strings.Contains $image.Permalink "mp4" }}
+                                  <video controls width="250">
+                                    <source src="{{ $image.Permalink }}" type="video/mp4" />
+                                    Download the
+                                    <a href="/media/cc0-videos/flower.webm">WEBM</a>
+                                    or
+                                    <a href="/media/cc0-videos/flower.mp4">MP4</a>
+                                    video.
+                                  </video>
+                                {{ else }}
+                                  <div style="background: #fff; color: red;">
+                                    Unsupported format {{ .Name }}
+                                  </div>
+                                {{ end }}
+                              </div>
+                            </div>
+                            <div class="masonry-tile-title">{{ .Params.Title }}</div>
+                          </div>
+                        {{ end }}
+                      {{ else }}
+                        {{ if eq $count 0 }}
+                          {{ $featured = "featured" }}
+                          {{ $count = add $count 1 }}
+                        {{ end }}
+                        {{ with $page.Params }}
+                          {{ range .Resources }}
+                            {{ if in $image.Permalink .src }}
+                              {{ if in .tags "featured" }}
+                                {{ $featured = "featured" }}
+                              {{ end}}
+                              {{ if in .tags "panoram-wide" }}
+                                {{ $featured = "panorama-wide" }}
+                              {{ end}}
+                              {{ if in .tags "panoram-tall" }}
+                                {{ $featured = "panorama-tall" }}
+                              {{ end}}
+                              {{ if in .Page.Params.tags "panorama-wide" }}
+                                {{ $featured = "panorama-wide" }}
+                              {{ end }}
+
+                              {{ if in .Page.Params.tags "panorama-tall" }}
+                                {{ $featured = "panorama-tall" }}
+                              {{ end }}
+
+                            {{ end }}
+                          {{ end }}
+                        {{ end }}
+
+                        {{ $show := true }}
+                        {{ range $page.Resources.ByType "image" }}
+                          {{ if in $image.Permalink .Permalink }}
+                            {{ if lt .Width 600 }}
+                              {{ $featured = "tiny" }}
+                              {{ if or hugo.IsProduction (eq site.Params.env "production") }}
+                                {{ $show = false }}
+                              {{ end }}
+                            {{ else if lt .Width 1000 }}
+                              {{ $featured = "small" }}
+                            {{ end }}
+                            {{ if and (gt .Width 1200) (gt .Width (mul .Height 2.5 )) }}
+                              {{ $featured = "panorama-wide" }}
+                            {{ end }}
+                            {{ if and (gt .Height 1200) (gt .Height (mul .Width 2.5 )) }}
+                              {{ $featured = "panorama-tall" }}
+                            {{ end }}
+                          {{ end}}
+                        {{ end }}
+
+
+                        {{ if $show }}
+                          <div class="masonry-tile {{ $featured }} masonry-tile-gallery-image show use-flex">
+                            <div class="masonry-tile-inner1">
+                              <div class="masonry-tile-inner2 b-3">
+                                {{ if strings.Contains .Name "mp4" }}
+                                  <video controls width="250">
+                                    <source src="{{ $image.Permalink }}" type="video/mp4" />
+                                    Download the
+                                    <a href="/media/cc0-videos/flower.webm">WEBM</a>
+                                    or
+                                    <a href="/media/cc0-videos/flower.mp4">MP4</a>
+                                    video.
+                                  </video>
+                                {{ else if or (strings.Contains .Name "jpeg") (strings.Contains .Name "jpg") }}
+                                  <figure class="gallery-thumb">
+                                    {{ partial "gallery/thumb.html" (dict "context" . "keyword" .Name "page" $page "kind" $page.Kind "show" true) }}
+                                    {{ with $page.Params }}
+                                      {{ range .Resources }}
+                                        {{ if in $image.Permalink .src }}
+                                          <figcaption>{{ .description}}</figcaption>
+                                        {{ end }}
+                                      {{ end }}
+                                    {{ end }}
+                                  </figure>
+                                {{ else }}
+                                  <div style="background: #fff; color: red;">
+                                    Unsupported format {{ .Name }}
+                                  </div>
+                                {{ end }}
+                              </div>
+                            </div>
+                              {{ $title := ""}}
+                              {{ $resources := $page.Param "resources" }}
+                              {{ range $resources }}
+                                {{ if in $image.Permalink  .src }}
+                                  {{ if .description }}
+                                    {{ $title = .description }}
+                                  {{ end }}
+                                {{ end }}
+                              {{ end }}
+                              {{ if $title }}
+                                {{ $titles := split $title "("}}
+                                <div class="masonry-tile-title">
+                                  <div class="tile-title">{{ index $titles 0 }}
+                                    <div class="tile-subtitle">{{ replace (index $titles 1) ")" "" }}</div>
+                                  </div>
+                                </div>
+                              {{ end }}
+                          </div>
+                        {{ end }}
+                      {{ end }}
+                    {{ end }}
+                  {{ end }}
+              {{ end}}
+
+            </div>
+
+            {{- $gallery_filters := false -}}
+            {{- if site.Params.weaverplatform -}}
+              {{- $wp := site.Params.weaverplatform -}}
+              {{- range $wp -}}
+                {{- $gallery_filters = .gallery_filters -}}
+              {{- end -}}
+            {{- end -}}
+
+            <div class="masonry-gallery-sidebar {{ if $gallery_filters}}show{{ end }}">
+              <div class="masonry-gallery-sidebar-sticky">
+
+              {{/*  <div class="masonry-gallery-sidebar-floating show">  */}}
+
+                <div class="description">
+                  {{ .Content }}
+
+                  {{ if eq .Kind "term" }}
+
+
+                  <div class="review-text">
+
+
+                    {{ if .Param "reviews" }}
+                      {{ $someVar2 := printf "%s" (index (.Param "reviews") 0) | printf "%s" }}
+                      {{ $page2 := site.GetPage ($someVar2) }}
+                      {{ with $page2 }}
+                        {{ partial "social/review.html"  (dict "context" . "page" $page "showIcon" false "title" "Dear Weaver Construction,") }}
+                      {{ end }}
+                    {{ end }}
+
+                  </div>
+
+                  <div class="education">
+                    <div class="eduction-icon">
+                      <i class='fas fa-handshake-angle'></i>
+                    </div>
+                    <div class="eduction-text">
+                    <p>
+                      Want to learn more about <a class='alternative' href='/architecture/{{ index (.Param "architecture") 0 }}/'>{{ index (.Param "architecture") 0 }} architecture</a>, or <a class='alternative' href='/design-build/{{ index (.Param "design-build") 0 }}/'>interior design</a>?
+                      If so, do reach out, <a class='primary' href='/contact/'>we'd love to talk.</a>
+                    </p>
+                    <p>
+                      &nbsp;
+                    </p>
+
+                    {{/*  <p>
+                      TO DO: Next Gallery (Call To Action)
+                    </p>  */}}
+
+                    </div>
+                  </div>
+                  {{ end }}
+                </div>
+
+                <div class="icon-bar icon-modern">
+                  {{ $term := "bathroom" }}
+                  {{ range $taxonomyname, $taxonomy := .Site.Taxonomies }}
+                    {{ $galleryimagefields := slice }}
+                    {{ $show := false }}
+                    {{ $count := 0}}
+                    {{ $kind := slice }}
+
+                    {{ if eq $taxonomyname "gallery-image" }}
+                      {{/*  <!-- This is a gallery-image term -->  */}}
+                      {{ $show = true }}
+                      {{ $kind = "gallery-image" }}
+                      {{ if not (in $galleryimagefields $taxonomyname) }}
+                        {{ $galleryimagefields = $galleryimagefields | append $taxonomyname }}
+                      {{ end }}
+                    {{ end }}
+                    {{ $show := false }}
+                    {{ $count := 0}}
+                    {{ $kind := slice }}
+
+                    {{ if not $taxonomy }}
+                      {{/*  <!-- There could be taxonomy on the resource itsef, let's check that too. -->  */}}
+                      {{ range $page.Pages }}
+                        {{ range .Params.Resources }}
+                          {{ range $key, $value := . }}
+                            {{ if eq $key "description" }}
+                            {{ else if eq $key "src"}} {{/*  <!-- src is the image file -->  */}}
+                            {{ else if eq $key "tags"}} {{/*  <!-- src is the image file -->  */}}
+                            {{ else }}
+                              {{ if eq $taxonomyname $key }}
+                                {{/*  <!-- Is this key a term -->  */}}
+                                {{ $show = true }}
+                                {{ $kind = "gallery-image" }}
+                                {{ range $value }}
+                                  {{ if not (in $galleryimagefields .) }}
+                                      {{ $galleryimagefields = $galleryimagefields | append . }}
+                                  {{ end }}
+                                {{ end }}
+                              {{ end }}
+                            {{ end }}
+                          {{ end}}
+                        {{ end }}
+                      {{ end }}
+                    {{ else }}
+                      {{ range $key, $value := $taxonomy }}
+                        {{ if (ne (len $value) 0)}}
+                          {{ $valuepages := $value.Pages }}
+                          {{ if not $valuepages}}
+                            {{ $valuepages := $value.RegularPages }}
+                          {{ end }}
+                          {{ range $valuepages }}
+                            {{ $vp := .}}
+                            {{ if $pages }}
+                              {{ range $pages }}
+                                {{ if eq $vp . }}
+                                  {{ $count = add $count 1 }}
+                                  {{/*  <!-- Is this key a term -->  */}}
+                                  {{ $show = true }}
+                                {{ end }}
+                              {{ end }}
+                            {{ else }}
+                            {{ $resources := .Resources }}
+                            {{ if not $resources}}
+                              {{ $resources = .Parent.Resources }}
+                            {{ end }}
+                            {{ range $resources }}
+                              {{ $ext := ".md" }}
+                              {{ $rootname := strings.TrimSuffix (path.Ext .Name) .Name }}
+                              {{ $ext := printf "%s" $ext | printf "%s%s" $rootname | printf "%s" }}
+                              {{ $rootname = $ext }}
+                              {{ if $rootname }}
+                                {{ $image := . }}
+                                {{ with $.Site.GetPage $rootname }}
+                                  {{ if .Param $taxonomyname }}
+
+                                    {{ $count = add $count 1 }}
+                                    {{ $show = true }}
+
+                                    {{ if (eq $page.Kind "term")}}
+                                      {{ if and  $taxonomy (in ( $taxonomy.Page.Param "filters") "gallery-image") }}
+                                      {{ else }}
+                                      {{ end }}
+                                    {{ end }}
+
+                                  {{ end }}
+
+                                {{ end}}
+                              {{ end}}
+                              {{ end }}
+                              {{ end }}
+                            {{ end}}
+                          {{ end}}
+                      {{ end }}
+                      {{ if eq $page.Kind "taxonomy"}}
+                        {{ if and .Page (in (.Page.Param "filters") "gallery") }}
+                          {{ $kind = "gallery" }}
+                        {{ else }}
+                          {{ $show = false }}
+                        {{ end }}
+                      {{ end }}
+                    {{ end }}
+
+                    {{ if and $show (ne $taxonomyname "tags") }}
+                      <div class="category category-{{ $kind }} {{ urlize $taxonomyname }}" data-taxonony="{{ $taxonomyname }}">
+                         <div class="icon-title">
+                            <a href="#filter-by-{{ $taxonomyname }}">
+                              <h5>
+                              {{ humanize $taxonomyname }}
+                            </h5>
+                          </a>
+                          </div>
+                          <div class="icon-row">
+                          {{ if $taxonomy }}
+                            {{ range $key, $value := $taxonomy }}
+                                {{ if and (ne ($value.Page.Param "filters") false) (.Page.Params.icon) }}
+                                  <div class="icon-item" data-tag="{{ .Page.Name }}">
+                                      <!--  href="{{ $value.Page.Permalink }}#top"  -->
+                                      <a class="icon-item-link">
+                                        <div class="icon-item-inner">
+                                          <i class='fas fa-{{ default "tag" .Page.Params.icon }}'></i>
+                                          <p>{{ humanize $key }}</p>
+                                      </div>
+                                    </a>
+                                  </div>
+                                {{ end }}
+
+                            {{ end }}
+                          {{ else }}
+                            {{ range $galleryimagefields }}
+                              {{ $term = . }}
+                              {{ $icon := "" }}
+                              {{ range site.Pages }}
+                                {{ if eq $term .Name }}
+                                  {{ $icon = .Params.icon }}
+                                  {{ $mode := .Param "filters"}}
+                                  {{ if and (eq (.Page.Param "filters") false) }}
+                                    {{ $icon = "" }}
+                                  {{ end }}
+                                  {{ if eq $mode false}}
+                                    {{ $icon = "" }}
+                                  {{ end }}
+                                {{ end}}
+                              {{ end }}
+                              {{ if $icon }}
+                                <div class="icon-item" data-tag="{{ $term }}">
+                                      <a class="icon-item-link">
+                                        <div class="icon-item-inner">
+                                          <i class='fas fa-{{ $icon }}'></i>
+                                          <p>{{ humanize $term }}</p>
+                                      </div>
+                                    </a>
+                                </div>
+                              {{ end }}
+                            {{ end }}
+                          {{ end }}
+                        </div>
+                      </div>
+                    {{ end }}
+                  {{ end }}
+
+
+
+                </div>
+              </div>
+          </div>
+        </div>
+      </article>
+    </section>
+  </main>
+{{ end }}

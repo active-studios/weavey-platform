@@ -1,0 +1,195 @@
+{{ $header := .Get "header" -}}
+{{ $description := .Get "footer" -}}
+{{ $params := .Params -}}
+{{ $tag := .Get "tag" -}}
+{{ $term := .Get "term" -}}
+{{ $taxonomy := .Get "taxonomy" -}}
+{{ $tag := .Get "tag" -}}
+{{ $pageSize := .Get "pageSize" -}}
+{{ $maxPages := .Get "maxPages" -}}
+
+
+<div
+  class="gallery-feature  {{ if $tag -}}
+    tag-{{ $tag -}}
+  {{ end -}} {{ if $term -}}
+    term-{{ $term -}}
+  {{ end -}} {{ if $taxonomy -}}taxonomy-{{ $taxonomy -}}{{ end -}}"
+>
+  <div class="gallery-feature-header">
+    <!-- <div class="gallery-feature-header-button">
+            {{ partial "button/calltoaction.html" (
+      dict    "title" (.Get "linkText")
+      "link" (.Get "link")
+      "class" "link"
+      )
+    -}}
+        </div> -->
+    <div class="gallery-feature-header-description">
+      <h4>{{ $header -}}</h4>
+    </div>
+  </div>
+  <div class="gallery-feature-body">
+    {{ $count := 0 -}}
+    {{ range $.Site.Pages -}}
+      {{ $image_type_arr := split .RelPermalink "." -}}
+      {{ $image_ext := index $image_type_arr 1 -}}
+
+      {{ $page := . -}}
+      {{ $subpages := .Site.RegularPages | first 0 -}}
+
+      {{ if or $taxonomy $term -}}
+        {{ range $.Site.Pages -}}
+          {{ if .Parent -}}
+            {{ if $term -}}
+              {{ $subpages = .Pages -}}
+            {{ end -}}
+            {{ if eq .Type $taxonomy -}}
+              {{ $subpages = .Parent.Pages -}}
+            {{ end -}}
+          {{ end -}}
+        {{ end -}}
+      {{ end -}}
+
+      {{ if not $subpages -}}
+        {{ $subpages = .Data.Terms -}}
+      {{ end -}}
+      {{ if not $subpages -}}
+        {{ $subpages = .Site.Data.Pages -}}
+      {{ end -}}
+      {{ if not $subpages -}}
+        {{ $subpages = .Pages -}}
+      {{ end -}}
+      {{ $show := true -}}
+
+      {{ if eq .Type "gallery" -}}
+        {{ $counter := 0 }}
+        {{ $gallery := . }}
+        {{ with $gallery.Params.tags -}}
+          {{ if in . $tag -}}
+            {{ if lt $count $pageSize -}}
+              {{ $count = add $count 1 -}}
+              {{ $counter = add $counter 1 -}}
+              <div class="gallery-feature-item gallery-feature-item-count-{{ $counter }} {{ urlize $page.Title -}}">
+                <div class="'gallery-feature-item-details">
+                  <div class="carousel-item-image">
+                    {{ $thumb := slice }}
+                    {{ range $gallery.Params.Resources -}}
+                      {{ if and (not $thumb) .src }}
+                        {{ $thumb = . -}}
+                      {{ end }}
+                    {{ end }}
+                    {{ if $thumb }}
+                      {{ range $page.Resources -}}
+                        {{ if in .RelPermalink $thumb.src -}}
+                          {{ with .Resize "400x" -}}
+                            {{ partial "gallery/thumb.html" (dict "context" . "tag" $tag "page" $page ) -}}
+                          {{ end -}}
+                        {{ end -}}
+                      {{ end }}
+                    {{ else }}
+                      {{ range $page.Resources.ByType "image" | first 1 -}}
+                        {{ with .Resize "400x" -}}
+                          {{ partial "gallery/thumb.html" (dict "context" . "tag" $tag "page" $page  ) -}}
+                        {{ end -}}
+                      {{ end -}}
+                    {{ end }}
+
+                  </div>
+                  <div class="gallery-feature-item-title">
+                    {{ partial "core/title.html" (dict "context" $page "level" 3 "counter" 0) }}
+                  </div>
+                </div>
+              </div>
+            {{ end -}}
+          {{ end -}}
+        {{ end -}}
+
+      {{ else -}}
+        {{ if and $subpages (ne .Kind "taxonomy") -}}
+          {{ if and $taxonomy -}}
+            {{ if or (eq .Type $taxonomy) (eq .Section $taxonomy) -}}
+              {{ if lt $count $pageSize -}}
+                {{ $count = add $count 1 -}}
+                <div
+                  class="gallery-feature-item gallery-feature-item-count-{{ $count }} {{ urlize .Type -}} section-{{ urlize .Section -}} {{ urlize $page.Title -}}"
+                >
+                  <div class="'gallery-feature-item-details">
+                    {{ $has_thumb := false }}
+                    {{ range $page.Resources.ByType "image" | first 1 -}}
+                      {{ $has_thumb := true }}
+                      <div class="carousel-item-image">
+                        <div>
+                            {{ with .Resize "400x" -}}
+                              {{ partial "gallery/thumb.html" (dict "context" . "taxonomy" $taxonomy "page" $page ) -}}
+                            {{ end -}}
+                        </div>
+                      </div>
+                    {{ end -}}
+                    <div class="gallery-feature-item-title">
+                      <a href="{{ .Permalink -}}"></a>
+                        {{ partial "core/title.html" (dict "context" $page "level" 3 "counter" 0) }}
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              {{ end -}}
+            {{ end -}}
+          {{ end -}}
+        {{ end -}}
+
+        {{/*  {{ if .Parent -}}
+          {{ if and $taxonomy (or $taxonomy (.Parent.Kind "taxonomy")) -}}
+            {{ if or (eq .Type $taxonomy) (eq .Section $taxonomy) -}}
+              {{ $page := . -}}
+              {{ if $subpages -}}
+                {{ $uniquepages := slice -}}
+                {{ range $subpages -}}
+                  {{ if not (in $uniquepages .) -}}
+                    {{ $uniquepages = $uniquepages | append . -}}
+                  {{ end -}}
+                {{ end -}}
+                {{ range $uniquepages -}}
+
+                  {{ $showpic := false -}}
+                  {{ if eq $page.Name .Name -}}
+                    {{ if eq .Kind "term" -}}
+                      {{ $showpic = true -}}
+                    {{ end -}}
+                  {{ end -}}
+                  {{ if $showpic -}}
+                    {{ if lt $count $pageSize -}}
+                      {{ $count = add $count 1 -}}
+                      <div
+                        class="gallery-feature-item {{ urlize $page.Title -}}"
+                      >
+                        <div class="'gallery-feature-item-details">
+                          <div class="carousel-item-image">
+                            <div>
+                              {{ if .Resources -}}
+                                {{ range .Resources.ByType "image" | first 1 -}}
+                                  {{ with .Resize "400x" -}}
+                                    {{ partial "gallery/thumb.html" (dict "context" . "tag" $tag "page" $page ) -}}
+                                  {{ end -}}
+                                {{ end -}}
+                              {{ end -}}
+                            </div>
+                          </div>
+                          <div class="gallery-feature-item-title">
+                            <a href="{{ .Permalink -}}">{{ .Title -}}</a>
+                          </div>
+                        </div>
+                      </div>
+                    {{ end -}}
+                  {{ end -}}
+                {{ end -}}
+              {{ end -}}
+            {{ end -}}
+          {{ end -}}
+        {{ end -}}  */}}
+      {{ end -}}
+
+    {{ end -}}
+
+  </div>
+</div>

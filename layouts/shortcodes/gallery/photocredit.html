@@ -1,0 +1,92 @@
+{{ $url := .Get "url" }}
+{{ if not $url }}
+  {{ $url = .Get "link" }}
+{{ end }}
+
+
+<div class="photo-credit {{ .Get "class" }}">
+  <div class="photo-credit-image">
+    <!-- photograph -->
+    {{ if $url }}
+      <a href="{{ $url }}">
+        <img src="{{ .Get "src" }}" alt="{{ .Get "title" }}" />
+      </a>
+    {{ else }}
+      <img src="{{ .Get "src" }}" alt="{{ .Get "title" }}" />
+    {{ end }}
+  </div>
+  {{ if or (.Get "content") (.Get "title") }}
+    <div class="photo-credit-text-container">
+      <div class="photo-credit-description">
+        <div>
+          {{ .Get "content" }}
+        </div>
+      </div>
+
+      <!-- PHOTO CREDIT<br /> -->
+      {{ if .Get "title" }}
+        <div class="photo-credit-source">
+          {{ if .Get "title" }}
+            <div class="photo-credit-source-title">"{{ .Get "title" }}"</div>
+          {{ end }}
+          <div class="photo-credit-source-info">
+            {{- .Get "location" -}}
+            {{- if and (.Get "location")  (.Get "date") -}}
+              ,&nbsp;
+            {{- end -}}
+            {{ if  .Get "date" }}
+              {{ .Get "date" }}
+            {{ end }}
+            {{ if .Get "credit" }}
+              <div class="photo-credit-copyright">
+                &copy;
+                {{ .Get "credit" }}
+              </div>
+            {{ end }}
+
+          </div>
+        </div>
+      {{ end }}
+
+
+      <div style="clear: both;"></div>
+      {{ $people := .Get "people" }}
+      {{ $people = split $people "," }}
+
+      {{ if gt ( len $people ) 1 }}
+        <div class="photo-credit-people">
+          <div class="photo-credit-people-label">
+            Pictured <span style="white-space: nowrap;">(left to right):</span>
+          </div>
+          <div class="photo-credit-people-list">
+            <span>
+              <b>
+                {{ $count := 0 }}
+                {{ range $people }}
+                  {{- $rootname  := printf "%s" (urlize .) | printf "%s%s" "about-us/" | printf "%s" -}}
+                  {{- $title := . -}}
+                  {{- with $.Site.GetPage $rootname -}}
+                    <a href="/our-team/{{ urlize .Name }}"
+                      ><span style="white-space: nowrap;"
+                        >{{- $title -}}</span
+                      ></a
+                    >
+                  {{- else -}}
+                    {{ $title }}
+                  {{- end -}}
+                  {{- if lt $count (sub (len $people) 2) -}}
+                    ,
+                  {{ else if eq $count (sub (len $people) 2) -}}
+                    &nbsp;and
+                  {{- end }}
+                  {{- $count = add $count 1 -}}
+                {{ end }}
+              </b>
+            </span>
+          </div>
+        </div>
+      {{ end }}
+      <div style="clear: both;"></div>
+    </div>
+  {{ end }}
+</div>

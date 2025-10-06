@@ -1,0 +1,23 @@
+{{- $taxonomy_args := .Get "taxonomy" -}}
+{{ $taxonomy_names := slice }}
+{{ if $taxonomy_args }}
+  {{- $taxonomy_names = split $taxonomy_args "," -}}
+{{ end }}
+
+{{- $section_args := .Get "section" -}}
+{{ $section_names := slice }}
+{{ if $section_args }}
+  {{- $section_names = split $section_args "," -}}
+{{ end }}
+
+{{ $max := .Get "max" }}
+{{ if not $max }}
+  {{ $max = 3 }}
+{{ end }}
+
+{{ $class := .Get "class" }}
+{{ if not $class }}
+  {{ $class = "social" }}
+{{ end }}
+
+{{ partial "taxonomy/terms.html" (dict "taxonomy" $taxonomy_names "section" $section_names "max" $max "class" $class) }}

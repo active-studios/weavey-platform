@@ -1,0 +1,43 @@
+<!doctype html>
+<html>
+  <head>
+    {{ partial "website/head.html" . }}
+  </head>
+  <body>
+    {{ block "main" . }}
+      {{ block "page" . }}
+        No content?<br /><br />
+        Show a 404 page?
+      {{ end }}
+    {{ end }}
+
+    {{- $mode := "light" -}}
+    {{- $mode_switch := false -}}
+    {{- if site.Params.weaverplatform -}}
+      {{- $wp := site.Params.weaverplatform -}}
+      {{- range $wp -}}
+        {{- $mode = .mode -}}
+        {{- $mode_switch = .mode_switch -}}
+      {{- end -}}
+    {{- end -}}
+    {{- if $mode_switch -}}
+      <div class="light-dark-switch mode-dark">
+        <div class="dark-side">
+          <i class="fa-regular fa-moon"></i>
+          <span class="text">Dark Mode</span>
+        </div>
+        <div class="light-side">
+          <i class="fa-regular fa-sun"></i>
+          <span class="text">Light Mode</span>
+        </div>
+      </div>
+    {{ end }}
+
+
+    <div id="modal">
+      {{ partial "logo/hero-logo.html" . }}
+    </div>
+
+    {{ partial "nav/menu-hamburger.html" . }}
+  </body>
+</html>

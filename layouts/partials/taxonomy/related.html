@@ -1,0 +1,125 @@
+{{/*
+<h2>Related Shiz</h2>
+
+.context: {{ .context}}<br /><br />
+.taxonomy: {{ .taxonomy}}<br /><br />
+.taxonomies: {{ .taxonomies}}<br /><br />
+.keyword: {{ .keyword}}<br /><br />
+.keyword: {{ .keyword}}<br /><br />
+.term: {{ .term}}<br /><br />
+.terms: {{ .terms}}<br /><br />
+.kind: {{ .kind}}<br /><br />
+
+Pages:{{ .Pages }} */}}
+
+{{ if eq .context.Kind "page" }}
+    <aside class="related preview">{{ partial "gallery/preview.html" .context }}</aside>
+{{ end }}
+
+{{ $page := .page }}
+{{ $context := .context }}
+{{ $next := slice }}
+{{ $shownext := false }}
+{{ $endofcategory := false }}
+{{ $pages := .context.Parent.Pages }}
+{{ if and (not $pages) .context.Parent }}
+    {{ $pages = .context.Parent.RegularPages }}
+{{ end }}
+{{ if and (not $pages) .context.Parent }}
+    {{ $pages = .context.Parent.Data.Pages}}
+{{ end }}
+
+{{ if and (not $pages) .context.Parent }}
+    {{ $pages = .context.Parent.Data.Terms }}
+{{ end }}
+
+{{ $preTitle := "Next" }}
+{{ if or (not $next) (eq (len $next) 0) }}
+    {{ range $pages }}
+        {{ if and $shownext (not $next) .Parent }}
+            {{ $next = .Parent }}
+        {{ else }}
+            {{ if (or (eq .Kind "term")  (eq .Kind "page")) }}
+                {{ if eq .Name $context.Name }}
+                  {{ if .Params.relatedTitle }}
+                      {{ $preTitle = .Params.relatedTitle }}
+                  {{ end }}
+                    {{ $shownext = true }}
+                {{ end }}
+            {{ end }}
+        {{ end }}
+    {{ end }}
+{{ end }}
+
+{{ $done := false }}
+{{ if not $next }}
+    {{ with .context }}
+      {{ with .Parent }}
+        {{ with .Parent }}
+            {{ if . }}
+              {{ $next = . }}
+              {{ $done = true }}
+            {{ end }}
+        {{ end }}
+      {{ end }}
+    {{ end }}
+{{ end }}
+
+<!-- Subpages -->
+<div style="margin-top: 45px;">
+  <aside class="related subpages">
+    {{ partial "taxonomy/subpages.html" (dict "context" .context "page" .page "taxonomy" .taxonomy "term" .term "terms" .terms "keyword" .keyword "kind" .kind ) }}
+  </aside>
+</div>
+
+
+{{ if or (eq ($context.Param "step") "count") (eq ($context.Parent.Param "step") "count")}}
+  {{ if (eq .kind "term")}}
+  <hr>
+  <div style="margin-top: 45px;">
+    <h4>Learn More About {{ $context.Parent.Title }} </h4>
+    <aside class="related subpages">
+      <ul class="articles summary-nav">
+          {{ $counter := 0 }}
+        {{ range $pages }}
+          {{ if not (eq .Type "panel")}}
+            {{ $counter = add $counter 1 }}
+            <li class='{{ if eq $context.Permalink .Permalink }}current{{ end }}'>
+              <a href="{{ .Permalink }}">
+                <span>
+                  <span class="title">STEP</span>
+                  <span class='number'>{{ $counter }}</span>
+                </span>
+                <span class="icon"><span>
+                  <i class="fa-solid fa-{{ default .Parent.Params.icon .Params.icon }}"></i>
+                </span></span>
+                {{ .Title }}
+              </a>
+            </li>
+          {{ end}}
+      {{ end }}
+      </ul>
+    </aside>
+
+  </div><div style="clear: both;"></div>
+  {{ end }}
+{{ end }}
+
+
+{{/*  <div style="margin-top: 45px;">
+  When you're done with a section, how do we go to the next best thing?
+</div>
+<br />  */}}
+
+<div class="next-page-in-section">
+    {{ if $next }}
+        {{/*  <aside class="next-page-in-section">
+            {{ $title :=  printf $next.Title | printf "%s -- **%s**" $preTitle | printf "%s" }}
+            {{ partial "button/calltoaction.html" (
+                dict    "title" ($title)
+                        "link" ($next.Permalink)
+                        "class" "button"
+            )}}
+        </aside>  */}}
+    {{ end }}
+</div>

@@ -1,0 +1,69 @@
+{{ define "page" }}
+  {{ partial "website/header.html" . }}
+  {{ $page := . }}
+
+
+  <main
+    class="taxonomy term {{ urlize .Title }} {{ urlize .Type }} kind-{{ urlize .Kind }} section-{{ urlize .Section }} weaver-platform-default"
+  >
+    <section class="weaver-platform-default">
+      <article class="container taxonomy term weaver-platform-default">
+        {{ partial "nav/breadcrumbs.html" . }}
+        {{ $page := .Page }}
+        <div class="term-wrapper term">
+          <div class="term-content">
+            {{ if eq (.Param "sectionPhoto") true }}
+              <div class="photos">
+                {{ range .Resources.ByType "image" }}
+                  {{ with .Resize "1000x" }}
+                    {{ partial "gallery/thumb.html" (dict "context" . "keyword" .Name "page" $page ) }}
+                  {{ end }}
+                {{ end }}
+              </div>
+            {{ end }}
+          </div>
+          {{ if not (strings.Contains .Content "<h1") }}
+            <h1 id="{{ urlize .Title }}" class="taxonomy-term-lis">
+              {{ .Title }}
+            </h1>
+          {{ end }}
+
+          {{ if eq .Section "reviews" }}
+            <div style="margin: 80px 0 0 0 ">
+              {{ partial "social/review.html"  (dict "context" . "showIcon" false) }}
+            </div>
+
+            <div class="term-block">
+              {{/* <aside class="reviews kind-term section-{{ urlize .Section }}
+              {{ urlize .Title }}"> */}}
+              {{ $taxonomy := urlize .Section }}
+              {{ $term := strings.TrimRight "s" .Name }}
+              {{ $keyword := urlize .Name }}
+              {{ partial "taxonomy/related.html" (dict "context" . "page" $page "kind" .Kind "taxonomy" $taxonomy "term" $term "terms" .Name "keyword" .Name ) }}
+              <div style="clear: both;"></div>
+            </div>
+            <div style="clear: both;"></div>
+          {{ else }}
+            {{ partial "core/columns.html" . }}
+            {{/* <aside class="kind-term section-{{ urlize .Section }}
+            {{ urlize .Title }}"> */}}
+          {{ end }}
+        </div>
+      </article>
+      <div class="for-more">
+        {{ $taxonomy := urlize .Section }}
+        {{ $term := strings.TrimRight "s" .Name }}
+        {{ $keyword := urlize .Name }}
+        {{ partial "taxonomy/related.html" (dict "context" . "page" $page "kind" .Kind "taxonomy" $taxonomy "term" $term "terms" .Name "keyword" .Name ) }}
+        <div style="clear: both;">
+          {{/* </aside> */}}
+        </div>
+      </div>
+    </section>
+  </main>
+
+  {{- if and (not hugo.IsProduction) (ne site.Params.env "production") -}}
+    <div class="debug">TAXONOMY TERM</div>
+  {{ end }}
+  {{ partial "website/footer.html" . }}
+{{ end }}

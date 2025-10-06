@@ -1,0 +1,6 @@
+{{- if hugo.IsProduction | or (eq site.Params.env "production") | and (ne .Params.robotsNoIndex true) -}}
+User-agent: *
+{{- else -}}
+User-agent: *
+Disallow: /
+{{- end -}}

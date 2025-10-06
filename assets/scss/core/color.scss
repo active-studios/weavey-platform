@@ -1,0 +1,15 @@
+/* Weaver Platform - Core - Color */
+
+// https://stackoverflow.com/questions/70411152/sass-detect-colour-darkness-to-determine-styles
+@function contrastText($color, $intensity: 25%, $saturation: 50%) {
+    $result: invert($color);
+    $lightness: lightness($result);
+    @if ($lightness < 50) {
+        $result: darken($color, $intensity);
+    }
+    @if ($lightness > 50) {
+        $result: lighten($color, $intensity);
+    }
+    // @return saturate($result, $saturation);
+    @return $result;
+}

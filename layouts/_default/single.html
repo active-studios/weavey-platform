@@ -1,0 +1,59 @@
+{{ define "main" }}
+  {{ partial "website/header.html" . }}
+
+
+  <main
+    class="default-single {{ urlize .Title }} {{ urlize .Type }} kind-{{ urlize .Kind }} section-{{ urlize .Section }} weaver-platform-default"
+  >
+    <section
+      class="default-single {{ urlize .Title }} kind-{{ urlize .Kind }} section-{{ urlize .Section }} weaver-platform-default"
+    >
+      <article>{{ partial "nav/breadcrumbs.html" . }}</article>
+
+      <article class="{{ urlize .Title }} weaver-platform-default">
+        {{ $page := . }}
+        {{ $term := strings.TrimRight "s" .Type }}
+        {{ $keyword := urlize .Name }}
+        {{ if.Resources.ByType "image" }}
+          <div class="photos">
+            {{ if .Resources }}
+              {{ range .Resources.ByType "image" }}
+                {{ if lt .Width 1000 }}
+                  {{ partial "gallery/thumb.html" (dict "context" . "keyword" .Name "page" $page ) }}
+                {{ else }}
+                  {{ with .Resize "1000x" }}
+                    {{ partial "gallery/thumb.html" (dict "context" . "keyword" .Name "page" $page ) }}
+                  {{ end }}
+                {{ end }}
+              {{ end }}
+            {{ end }}
+          </div>
+        {{ else }}
+
+        {{ end }}
+        {{ with .Date }}
+          {{ $dateMachine := . | time.Format
+            "2006-01-02T15:04:05-07:00"
+          }}
+          {{ $dateHuman := . | time.Format ":date_long" }}
+          <time datetime="{{ $dateMachine }}">{{ $dateHuman }}</time>
+        {{ end }}
+
+        {{ if not (strings.Contains .Content "<h1") }}
+          <h1 id="{{ urlize .Title }}" class="default-section">{{ .Title }}</h1>
+        {{ end }}
+        {{ partial "core/columns.html" . }}
+      </article>
+      <div class="for-more">
+        {{ $term := strings.TrimRight "s" .Type }}
+        {{ $keyword := urlize .Name }}
+        {{ partial "taxonomy/related.html" (dict "context" . "page" $page "kind" .Kind "term" $term "terms" .Type "keyword" $keyword ) }}
+      </div>
+    </section>
+  </main>
+  {{- if and (not hugo.IsProduction) (ne site.Params.env "production") -}}
+    <div class="debug">_DEFAULT SINGLE</div>
+  {{ end }}
+
+  {{ partial "website/footer.html" . }}
+{{ end }}

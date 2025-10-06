@@ -1,0 +1,63 @@
+
+{{/*  <h2>TERMS</h2>  */}}
+
+
+{{/*  <h2>TERMS</h2>
+<p>
+  This terms file is currently commented out.
+</p>  */}}
+
+
+
+<!--
+Title: {{ .Title }}
+{{ with .GetTerms "tags" }}
+  <p>Tags</p>
+  <ul>
+    {{ range . }}
+      <li><a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a></li>
+    {{ end }}
+  </ul>
+{{ end }} -->
+
+<!--
+{{ if .Data.Terms }}
+          <ul>
+            {{ $data := .Data }}
+            {{ range $key, $value := .Data.Terms }}
+              <li>
+                <a href="/tags/{{ $key | urlize }}">{{ $key }}</a>
+              </li>
+            {{ end }}
+          </ul>
+        {{ end }}
+
+ {{ if .Data.Terms }}
+            <div>
+              <h4>TERMS</h4>
+                {{ with .Data.Terms }}
+                  {{ range $key, $value := . }}
+                    <div>
+                      <h2>{{ $key }}</h2>
+                      <ul>
+                        {{ range $value }}
+                          <li>{{ . }}</li>
+                        {{ end }}
+                      </ul>
+                    </div>
+                  {{ end }}
+                {{ end }}
+              </div>
+            </div>
+          {{ end }}
+
+          {{ if .Data.Terms }}
+          <ul>
+            {{ $data := .Data }}
+            {{ range $key, $value := .Data.Terms }}
+              <li>
+                <a href="/tags/{{ $key | urlize }}">{{ $key }}</a>
+              </li>
+            {{ end }}
+          </ul>
+        {{ end }}  -->

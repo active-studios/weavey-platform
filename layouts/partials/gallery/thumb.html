@@ -1,0 +1,180 @@
+{{ $page := .page }}
+{{ $context := .context }}
+{{ $kind := .kind }}
+{{ $terms := .terms }}
+{{ $classes := .classes }}
+{{ $show := .show }}
+{{ $image := "" }}
+{{ $url := "" }}
+{{ $width := "" }}
+{{ $height := "" }}
+{{ $src := .src }}
+{{ if not .src }}
+  {{ $src = .image }}
+{{ end }}
+{{ if not $src }}
+  {{ if and (gt $context.Width 2048) (gt $context.Width $context.Height) }}
+    {{ with $context.Resize "2048x" }}
+      {{ $width = .Width }}
+      {{ $height = .Height }}
+      {{ $src = .RelPermalink }}
+    {{ end }}
+  {{ else if and (gt $context.Width 2048) (lt $context.Width $context.Height) }}
+    {{ with $context.Resize "x2048" }}
+      {{ $width = .Width }}
+      {{ $height = .Height }}
+      {{ $src = .RelPermalink }}
+    {{ end }}
+  {{ else }}
+    {{ $width = $context.Width }}
+    {{ $height = $context.Height }}
+    {{ $src = $context.RelPermalink }}
+  {{ end }}
+{{ end }}
+{{ if $src }}
+  {{ $image = $src}}
+{{ end }}
+
+{{ if eq $kind "term" }}
+  {{ $url = .RelPermalink }}
+{{ end }}
+
+{{ if eq $kind "page" }}
+  {{ $url = .RelPermalink }}
+{{ end }}
+
+{{ if eq $kind "article" }}
+  {{ $url = .RelPermalink }}
+{{ end }}
+{{ if .link }}
+  {{ $url = .link }}
+{{ else if .url }}
+  {{ $url = .url }}
+{{ end }}
+
+{{ range $key, $value := . }}
+  {{ if eq $key "page" }}
+    {{ $page = . }}
+    {{ if not $url }}
+      {{ $url = .RelPermalink }}
+    {{ end }}
+  {{ end }}
+  {{ if eq $key "context" }}
+    {{ $context = . }}
+    {{ if not $image }}
+      {{ $image = .RelPermalink }}
+    {{ end }}
+  {{ end }}
+  {{ if eq $key "image" }}
+    {{ range $page.Resources }}
+      {{ $context = . }}
+      {{ if not $image }}
+        {{ $image = .RelPermalink }}
+      {{ end}}
+    {{ end }}
+  {{ end }}
+{{ end }}
+
+{{ if and $image (eq $kind "term") }}
+  {{ $url = $image }}
+{{ end }}
+
+{{ if and (not $url) (eq $context.Permalink $context.RelPermalink) }}
+  {{ $url = $context.Permalink }}
+{{ end }}
+
+{{ $image_type_arr := split $url  "." }}
+{{ $image_ext := index $image_type_arr 1 }}
+{{ $isimage := false }}
+
+{{ if $image_type_arr }}
+  {{ if in $image_type_arr "png" }}
+    {{ $isimage = true }}
+  {{ end }}
+  {{ if in $image_type_arr "jpg" }}
+    {{ $isimage = true }}
+  {{ end }}
+  {{ if in $image_type_arr "jpeg" }}
+    {{ $isimage = true }}
+  {{ end }}
+  {{ if in $image_type_arr "webp" }}
+    {{ $isimage = true }}
+  {{ end }}
+{{ end }}
+
+{{ if $url }}
+  {{ if .Draft }}
+    <div class="article-draft">
+      <i class="fa-solid fa-compass-drafting"></i>
+    </div>
+  {{ end }}
+
+  <div class="thumb-container thumb-container-1-{{ $kind }} {{ $classes }} {{ if $show }}show{{ end }}" data-classes="{{ $classes }}">
+    {{ if eq $kind "term" }}
+      {{ if not $url }}
+        {{ $url = $context.RelPermalink }}
+      {{ end }}
+      {{ if not $width }}
+        {{ $width = $context.Width }}
+        {{ $height = $context.Height }}
+      {{ end }}
+      {{ if not $height }}
+        {{ $width = $context.Width }}
+        {{ $height = $context.Height }}
+      {{ end }}
+    {{ end }}
+
+    {{ if and $isimage (not .url) (ne .kind "term") }}
+      {{ $url = ""}}
+    {{ end }}
+    <a
+      {{ if $url }}
+        href="{{ $url }}"
+      {{ end }}
+      {{ if and $width $height }}
+        data-pswp-width="{{ $width }}" data-pswp-height="{{ $height }}"
+        target="_blank"
+      {{ end }}
+    >
+      <div
+        class="thumb-container-image thumb-container-image-1-{{ $kind }}"
+        data-pswpz-width="{{ $width }}"
+        data-pswpz-height="{{ $height }}"
+      >
+        {{ if $image }}
+          {{ if and $src }}
+            {{ if and (lt $width 2049) (lt $height 2049) }}
+              <img src="{{ $src }}" />
+            {{ else }}
+              Image too large! ({{ $width }}x{{ $height }})
+            {{ end }}
+          {{ end }}
+        {{ else }}
+          {{/*  <div
+            style="background: rgba(255, 255, 255, 0.5); padding: 10px; margin-right: 5px;"
+          >
+            <h4>NO IMAGE FOUND!</h4>
+            <p style="font-size: 0.9em">
+              (can we find the first image in the gallery?)<br />
+              {{ $context }}
+            </p>
+          </div>  */}}
+        {{ end }}
+      </div>
+    </a>
+  </div>
+{{ else }}
+  <div class="thumb-container thumb-container-3-{{ $context.Kind }}">
+    <div class="thumb-container-image">
+      {{ if $image }}
+        <img src="{{ $src }}" />
+      {{ else }}
+        {{/*  <div
+          style="background: rgba(0, 0, 0, 0.5); padding: 10px; margin-right: 5px;"
+        >
+
+        </div>  */}}
+      {{ end }}
+    </div>
+  </div>
+{{ end }}

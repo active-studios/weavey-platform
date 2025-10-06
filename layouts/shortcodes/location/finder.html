@@ -1,0 +1,12 @@
+<input type="text" id="zip" name="zip" placeholder="Enter Zip Code" />
+<button id="find">Find</button>
+
+<p>Or Pick Your Town From Our Service Area List:</p>
+
+<ul class="columns">
+  {{ range site.Data.towns.towns }}
+    <li><a href="#">{{ . }}</a></li>
+  {{ end }}
+</ul>
+
+<p>(Clicking on a town will zoom in the map to that location)</p>

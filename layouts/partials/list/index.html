@@ -1,0 +1,19 @@
+{{ $pages = .Pages }}
+
+
+<div>
+  <ul class="articles articles-related">
+    {{ range $pages }}
+      {{ $show := true }}
+      {{ if or (eq .Type "gallery") (eq .Type "gallery-image") }}
+        {{ if not (.Resources.ByType "image") }}
+          <!-- If this is a gallery type, show the summary -->
+          {{ $show = false }}
+        {{ end }}
+      {{ end }}
+      {{ if $show }}
+        <li>{{ partial "summary.html" (dict "context" . "count" "5") }}</li>
+      {{ end }}
+    {{ end }}
+  </ul>
+</div>

@@ -1,0 +1,188 @@
+/* Theme - Agency  */
+
+* {
+    box-sizing: border-box;
+}
+
+
+html {
+    font-size: 62.5%;
+}
+
+
+body {
+    font-size: calc(clamp(1.8rem, 1.9vw, 2.0rem));
+    margin: 0px;
+    // color: contrastText($alternative, 25%, 5%);;
+}
+
+body,
+body p,
+body li,
+body a {
+    font-family: $bodyfont;
+
+    &.primary {
+        font-weight: bold;
+    }
+
+    &.alternative {
+        font-style: italic;
+    }
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: $headerfont;
+    margin: 0;
+}
+
+
+h1 {
+    font-size: 8vw;
+    line-height: 8.0vw;
+    font-weight: 600;
+    max-width: 85%;
+
+    // font-size: 3.8rem;
+    // line-height: 4.2rem;
+    font-family: $headerfont;
+    color: color-mix(in srgb, $primary, var(--color-foreground) 20%);
+
+    // do this somewhere else
+    // margin: 30px 0 0 0;
+
+    // border-top: 3px $calltoaction solid;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    max-width: 85%;
+}
+
+.alternative {
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5 {
+        // color: rgba(0, 0, 0, 0.5);
+        color: color-mix(in srgb, $alternative, var(--color-foreground) 20%);
+    }
+}
+
+
+h2 {
+    font-size: 3.2rem;
+    line-height: 3.5rem;
+    font-weight: 400;
+    text-transform: uppercase;
+
+    // font-size: 3.8rem;
+    // line-height: 4.2rem;
+    font-family: $headerfont;
+    margin: 30px 0 0 0;
+    transition: color 2s ease-in-out, background-color 2s ease-in-out;
+    color: color-mix(in srgb, $highlight, var(--color-foreground) 10%);
+    // border-top: 3px $calltoaction solid;
+    padding-top: 15px;
+    max-width: 95%;
+}
+
+
+// }
+
+h3 {
+    font-size: 2.8rem;
+    line-height: 3.1rem;
+
+    font-weight: 200;
+    margin: 0 0 $gutter/1.5 0;
+    padding: 0;
+    transition: color 2s ease-in-out, background-color 2s ease-in-out;
+    color: color-mix(in srgb, $alternative, var(--color-foreground) 20%);
+    font-family: $headerfont;
+
+    &>a {
+        text-decoration: none;
+
+        &:hover {
+            &[href] {
+                text-decoration: underline;
+            }
+        }
+    }
+}
+
+h4 {
+    margin: 0 0 $gutter/1.5 0;
+    padding: 0;
+    transition: color 2s ease-in-out, background-color 2s ease-in-out;
+    color: color-mix(in srgb, $alternative, var(--color-foreground) 20%);
+    font-family: $headerfont;
+
+    &>a {
+        text-decoration: none;
+
+        &:hover {
+            &[href] {
+                text-decoration: underline;
+            }
+        }
+    }
+}
+
+h5 {
+    color: color-mix(in srgb, $primary, var(--color-foreground) 10%);
+    text-transform: uppercase;
+    font-size: 2rem;
+    font-weight: 400;
+
+    &>a {
+        text-decoration: none;
+
+        &:hover {
+            &[href] {
+                text-decoration: underline;
+            }
+        }
+    }
+}
+
+h2 strong {
+    color: color-mix(in srgb, $alternative, var(--color-foreground) 50%);
+    font-weight: 800;
+}
+
+p,
+li {
+    font-size: 1.8rem;
+    font-weight: 300;
+    // letter-spacing: 1.5px;
+    line-height: 2.4rem;
+
+    em,
+    strong {
+        color: $alternative;
+    }
+}
+
+p {
+    font-size: 1.8rem;
+    font-weight: 300;
+    // letter-spacing: 1.5px;
+    line-height: 2.4rem;
+    margin: 0 0 30px 0;
+    transition: color 2s ease-in-out, background-color 2s ease-in-out;
+    color: var(--color-foreground);
+}
+
+header {
+
+    .hero-outer {
+        aspect-ratio: none !important;
+    }
+}

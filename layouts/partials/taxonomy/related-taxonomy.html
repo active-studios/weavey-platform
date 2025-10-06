@@ -1,0 +1,22 @@
+{{ range $taxonomyname, $taxonomy := .Site.Taxonomies }}
+  {{ if $taxonomy }}
+    <div class="icon-title">
+      <h5 class="related-taxonomy-icon-title">
+        {{ $taxonomyname }}
+      </h5>
+    </div>
+    <div class="icon-row">
+      {{ range $key, $value := $taxonomy }}
+
+        <div class="icon-item">
+          <a href="{{ $value.Page.Permalink }}#top" class="icon-item-link">
+            <div class="icon-item-inner">
+              <i class="fas fa-{{ .Page.Params.icon }}"></i>
+              <p>{{ $key }}</p>
+            </div>
+          </a>
+        </div>
+      {{ end }}
+    </div>
+  {{ end }}
+{{ end }}

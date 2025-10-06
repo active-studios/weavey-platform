@@ -1,0 +1,27 @@
+
+{{ $taxonomy := "review" }}
+{{ $term := "bathroom" }}
+
+{{ $page3 := . }}
+
+<div style="clear: both;"></div>
+
+{{/*  <ul class="gallery preview">
+    {{ range $taxonomyname, $taxonomy := .Site.Taxonomies }}
+          {{ range $key, $value := $taxonomy }}
+                {{ range $value.Pages }}
+                        {{ $foo := index .Params $taxonomyname }}
+                        {{ $bar := index $page3.Params $taxonomyname }}
+                        {{ $term  := index (split $page3.Permalink "/") 4 }}
+                        {{ if $foo }}
+                            {{ $termname := .Param $taxonomyname }}
+                            {{ if in $termname $term }}
+                                <li hugo-nav="{{ .RelPermalink }}">
+                                    <a href="{{ .Permalink}}">{{ .LinkTitle }} </a>
+                                </li>
+                            {{ end }}
+                        {{ end }}
+                {{ end }}
+          {{ end }}
+    {{ end }}
+  </ul>  */}}

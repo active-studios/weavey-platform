@@ -1,0 +1,197 @@
+/* Weaver Platform - Website - Container */
+
+.container {
+    &>img {
+        width: 100%;
+    }
+}
+
+article>blockquote,
+.review>blockquote {
+
+    display: flex;
+    height: auto;
+    min-height: 150px;
+    max-height: 0;
+
+
+    margin: 0;
+    padding: 0;
+
+    // & > blockquote {
+
+    //     margin: 40px 15px 0 0 !important;
+    //     padding: 0;
+    //     min-width: 140px;
+
+    //     &:before, &:after{
+    //         display: block;
+
+    //         color: lighten($alternative, 10%);
+    //         content: "the";
+    //         text-align: center;
+    //         margin: 0;
+    //         padding: 0;
+    //         letter-spacing: 5px;
+    //         margin: auto;
+    //         width: 100%;
+    //         position: relative;
+    //         top: -15px;
+    //         left: 0;
+    //                     font-size: 1.0rem;
+    //     }
+    //     &:after {
+    //         content: "family";
+    //         position: relative;
+    //         top: 80px;
+    //         left: 0px;
+    //     }
+
+
+    //     position: relative;
+    //     top: -20px;
+    //     z-index: 198;
+
+    //     & > p {
+    //         position: absolute;
+    //         z-index: 400;
+    //         width: 100%;
+    //         min-width: 120px;
+    //         top: 35px;
+    //         left: 0;
+    //         overflow: hidden;
+
+    //         color: lighten($alternative, 10%);
+    //         width: 100%;
+    //         padding: 0 10px;
+    //         font-size: 2.5rem !important;
+    //         border-top: 3px lighten($alternative, 10%) solid;
+    //         border-bottom: 3px lighten($alternative, 10%) solid;
+    //         background: $foreground;
+    //         text-align: center;
+
+
+
+    // &:first-letter {
+    //     margin: -25px 0 0 0;
+    //     font-family: 'Family Monogram Font Version 5';
+    //     font-size: 6.0rem;
+    //     color: $alternative;
+    //     vertical-align: middle;
+    //     text-align: center;
+    //     word-break: break-all;
+    // }
+
+    //     }
+    //     &>blockquote {
+    //         display: block;
+    //         position: relative;
+    //                         z-index: 99;
+    //         top: 0;
+    //         left: 0;
+    //         width: 100%;
+    //         color: lighten($alternative, 10%);
+
+    //         & > p {
+    //             display: block;
+    //             position: absolute;
+    //             top: 10px;
+    //             left: -40px;
+    //             width: 100%;
+    //             text-align: center;
+    //             font-size: 15.0rem !important;
+    //             color: lighten($alternative, 10%);
+    //             background: $foreground;
+    //             z-index: 100;
+
+    //         }
+    //     }
+
+    // }
+
+    // & > p {
+    //     color: darken($primary, 20%);
+    //     font-size: 1.8rem;
+    //     line-height: 1.8rem;
+    //     letter-spacing: 1px;
+    //     font-weight: 400;
+
+    //     padding: 0 5px 0 5px;
+    // }
+
+    // p {
+    //     margin: 0;
+    //     // padding: 0 50px 0 10px;
+    //     font-size: 2.0rem;
+    //     line-height: 2.0rem;
+    //     font-style: none;
+    //     color: darken($primary, 20%);
+    // }
+
+    // & > blockquote {
+
+    //     float: left;
+    //     display: block;
+    //     text-align: center;
+    //     width: 150px;
+    //     height: 200px;
+    //     margin: auto;
+
+
+
+    //     &:after {
+    //         font-size: 1.0rem;
+    //         color: lighten($alternative, 10%);
+    //         content: "family";
+    //         text-align: center;
+    //         letter-spacing: 5px;
+    //         margin: auto;
+    //     }
+
+    //     & > p {
+    //         display: block;
+    //         color: $alternative;
+    //         letter-spacing: 5px;
+    //         margin: 0 5% 0 5%;
+    //         width: 0;
+
+    //         &:first-letter {
+
+    //             margin: 0 0 0 -200px;
+    //             font-family: 'Family Monogram Font Version 04';
+
+    //             font-size: 8.0rem;
+    //             line-height: 8.0rem;
+    //             word-break: break-all;
+    //         }
+    //     }
+
+
+    // }
+}
+
+.debug {
+    display: none;
+    opacity: 0.02;
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    transition: all 0.5s ease-in-out;
+    text-shadow: -1px -1px 0 darken($alternative, 5%), 1px -1px 0 darken($alternative, 5%),
+        -1px 1px 0 darken($alternative, 5%), 1px 1px 0 darken($alternative, 5%);
+    color: white;
+    padding: 5px;
+    font-size: 3.5rem;
+    font-weight: 800;
+    text-align: right;
+
+    &:hover {
+        opacity: 0.5;
+        color: lighten($alternative, 30%);
+    }
+}
+
+.page .photos,
+.kind-page .photos {
+    display: none;
+}

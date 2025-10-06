@@ -1,0 +1,181 @@
+.badges {
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+    max-width: 1000px;
+
+    li {
+      flex: 1;
+      border: 3px transparent solid;
+      display: block;
+
+      text-align: center;
+    }
+  }
+
+  $badge-size: 125px;
+
+  .badge-outer {
+    border: 3px color-mix(in srgb, #000, var(--color-background) 20%) double;
+    border-radius: 135px;
+    width: 135px;
+    height: 135px;
+    margin: auto;
+  }
+
+  .badge {
+    cursor: pointer;
+    border: 20px color-mix(in srgb, $alternative, var(--color-background) 55%) solid;
+    background: color-mix(in srgb, $alternative, var(--color-foreground) 10%);
+    color: color-mix(in srgb, $alternative, var(--color-background) 45%);
+
+    &:hover {
+      border-color: color-mix(in srgb, $alternative, var(--color-background) 45%);
+      background: color-mix(in srgb, $alternative, var(--color-foreground) 20%);
+      color: color-mix(in srgb, $alternative, var(--color-foreground) 45%);
+    }
+
+    border-radius: $badge-size;
+    height: $badge-size;
+    width: 125px;
+    margin: 50px 0 25px 0;
+    text-align: center;
+    margin: auto;
+
+    span.icon {
+      display: block;
+      width: 125px;
+      height: 125px;
+      position: relative;
+      top: 45%;
+      left: 22%;
+
+      i {
+        display: block;
+        margin: auto;
+        position: absolute;
+        top: -25%;
+        left: 0;
+        font-size: 4rem;
+      }
+    }
+
+    span.text {
+      display: block;
+      position: relative;
+      top: -90%;
+      left: 25%;
+
+      span {
+        display: block;
+        margin: auto;
+        position: absolute;
+        top: -25%;
+        left: -25%;
+        width: 100%;
+        padding: 0 20%;
+        font-size: 1.1rem;
+        line-height: 1.0rem;
+      }
+    }
+
+    .band {
+      display: block;
+      position: relative;
+      top: -140px;
+      left: -13px;
+      width: 125px;
+      height: 125px;
+
+      text,
+      textPath {
+        fill: $calltoaction
+      }
+    }
+  }
+}
+
+section.primary {
+  .badges {
+    .badge-outer {
+      border: 3px color-mix(in srgb, $primary, var(--color-background) 20%) double;
+      border-radius: 135px;
+      width: 135px;
+      height: 135px;
+      margin: auto;
+    }
+
+    .badge {
+      border-color: color-mix(in srgb, $primary, var(--color-background) 80%) !important;
+      background: color-mix(in srgb, $primary, var(--color-foreground) 20%) !important;
+      color: color-mix(in srgb, $primary, var(--color-background) 60%) !important;
+
+      &:hover {
+        border-color: color-mix(in srgb, $primary, var(--color-background) 80%) !important;
+        background: color-mix(in srgb, $primary, var(--color-foreground) 20%) !important;
+        color: color-mix(in srgb, $primary, var(--color-background) 60%) !important;
+      }
+
+      text,
+      textPath {
+        fill: darken($primary, 10%);
+      }
+    }
+  }
+}
+
+section.alternative {
+  .badges {
+    .badge-outer {
+      border: 3px color-mix(in srgb, $alternative, var(--color-background) 20%) double;
+      border-radius: 135px;
+      width: 135px;
+      height: 135px;
+      margin: auto;
+    }
+
+    .badge {
+      border-color: color-mix(in srgb, $alternative, var(--color-background) 80%) !important;
+      background: color-mix(in srgb, $alternative, var(--color-foreground) 20%) !important;
+      color: color-mix(in srgb, $alternative, var(--color-background) 60%) !important;
+
+      &:hover {
+        border-color: color-mix(in srgb, $alternative, var(--color-background) 60%) !important;
+        background: color-mix(in srgb, $alternative, var(--color-foreground) 0%) !important;
+        color: color-mix(in srgb, $alternative, var(--color-background) 40%) !important;
+      }
+
+      text,
+      textPath {
+        fill: darken($alternative, 10%);
+      }
+    }
+  }
+}
+
+section.subtle {
+  .badges {
+    .badge {
+      border-color: color-mix(in srgb, $subtle, var(--color-background) 80%) !important;
+      background: color-mix(in srgb, $subtle, var(--color-foreground) 20%) !important;
+      color: color-mix(in srgb, $subtle, var(--color-background) 60%) !important;
+
+      &:hover {
+        border-color: color-mix(in srgb, $subtle, var(--color-background) 80%) !important;
+        background: color-mix(in srgb, $subtle, var(--color-foreground) 20%) !important;
+        color: color-mix(in srgb, $subtle, var(--color-background) 60%) !important;
+      }
+
+      text,
+      textPath {
+        fill: darken($primary, 10%);
+      }
+    }
+  }
+}

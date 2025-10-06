@@ -1,0 +1,23 @@
+{{/* <section class="section breadcrumbs weaver-platform-default">
+  <article class="breadcrumbs container weaver-platform-default">
+*/}}
+<div>
+  <nav
+    aria-label="breadcrumb"
+    class="breadcrumb breadcrumb-length-{{ len .Ancestors.Reverse }}"
+  >
+    <ol>
+      {{ range .Ancestors.Reverse }}
+        <li>
+          <a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a>
+        </li>
+      {{ end }}
+      <li class="active">
+        <a aria-current="page" href="{{ .RelPermalink }}">{{ .LinkTitle }}</a>
+      </li>
+    </ol>
+  </nav>
+</div>
+{{/* </article>
+  </section>
+*/}}

@@ -1,0 +1,79 @@
+{{ partial "core/debug.html" . }}
+
+
+<footer class="parallax">
+  <div class="footer-container">
+    <div class="footer-search">
+      <input id="search" placeholder="Search This Website" />
+    </div>
+
+    <div class="footer-links footer-links-container">
+      <nav class="footer menu">
+        {{ partial "nav/menu-footer.html" . }}
+      </nav>
+
+      <div class="footer-flex" style="display: none;">
+        {{ range $tax, $_taxonomy := .Site.Taxonomies }}
+          <div class="footer-column footer-links">
+            {{ $tax }}
+            <h5 class="footer-title">
+              <a href="/{{ $tax }}" class="term"> {{ $tax }}<br /> </a>
+            </h5>
+            <ul>
+              {{ range $taxonomy := $_taxonomy.Alphabetical }}
+                <li>
+                  <a href="{{ .Page.Permalink }}" class="term">
+                    {{ .Page.Name }}
+                  </a>
+                </li>
+              {{ end }}
+            </ul>
+          </div>
+        {{ end }}
+      </div>
+    </div>
+
+    <div class="footer-logo">
+      <a href="/">
+        <span>&nbsp;</span>
+      </a>
+    </div>
+
+    <div class="footer-copyright">
+      &copy; Copyright 2025,
+      {{ .Site.Title }}
+    </div>
+
+    <div class="footer-social">
+      {{ if $.Site.Params.social }}
+        <div class="contact-social">
+          <p>Connect with us on social media:</p>
+          <ul class="contact-social-icons">
+            {{ range $.Site.Params.social }}
+              <li class="contact-icon-type">
+                <a href="{{ .url }}" target="_blank" rel="noopener">
+                  <i class="{{ .icon_pack }} fa-{{ .icon }}"></i>
+                  <span
+                    >{{ urlize $.Site.Data.ld.organization.legalName }}</span
+                  >
+                  <span class="title">{{ .icon }}</span><br />
+                </a>
+              </li>
+            {{ end }}
+          </ul>
+        </div>
+      {{ end }}
+    </div>
+
+    <div class="footer-sitemap">
+      <a href="/sitemap"><i class="fa-solid fa-sitemap"></i> Sitemap</a>
+    </div>
+  </div>
+</footer>
+
+<!-- Google Analytics -->
+{{ if eq (getenv "HUGO_ENV") "production" }}
+  {{ template "_internal/google_analytics.html" . }}
+{{ end }}
+
+{{ template "_internal/google_analytics.html" . }}

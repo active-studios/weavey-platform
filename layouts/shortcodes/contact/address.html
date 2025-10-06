@@ -1,0 +1,35 @@
+{{ if $.Site.Data.ld.organization }}
+  <ul class="contact-company">
+    {{ if $.Site.Data.ld.organization.legalName }}
+      <li class="contact-legal-name">
+        <p>
+          {{ $.Site.Data.ld.organization.legalName }}
+        </p>
+      </li>
+    {{ end }}
+    {{ if $.Site.Data.ld.organization.address }}
+      <li class="contact-address">{{ $.Site.Data.ld.organization.address }}</li>
+    {{ end }}
+    {{ if $.Site.Data.ld.organization.email }}
+      <li class="contact-email">
+        <a href="mailto:{{ $.Site.Data.ld.organization.telephone }}"
+          ><i class="fas fa-envelope"></i>
+          {{ $.Site.Data.ld.organization.email }}</a
+        >
+      </li>
+    {{ end }}
+    {{ if $.Site.Data.ld.organization.telephone }}
+      <li class="contact-telephone">
+        <a href="tel:{{ $.Site.Data.ld.organization.telephone }}"
+          ><i class="fas fa-phone"></i>
+          {{ $.Site.Data.ld.organization.telephone }}</a
+        >
+      </li>
+    {{ end }}
+    {{ if $.Site.Data.ld.organization.fax }}
+      <li class="contact-telephone">
+        <i class="fas fa-fax"></i> {{ $.Site.Data.ld.organization.fax }}
+      </li>
+    {{ end }}
+  </ul>
+{{ end }}

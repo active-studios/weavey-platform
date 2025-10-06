@@ -1,0 +1,193 @@
+/* Weaver Platform - Website - Effects */
+
+header {
+
+    div.top-nav {
+        transition: all 1.5s;
+        z-index: 13000;
+
+        background: transparent;
+        color: color-mix(in srgb, $alternative, var(--color-foreground) 85%);
+        border-color: color-mix(in srgb, $alternative, var(--color-foreground) 85%);
+
+        a {
+            transition: all 0.2s;
+            // text-shadow: 1px 1px 2px rgba(133, 203, 245, 0.1);
+
+            color: color-mix(in srgb, $alternative, var(--color-foreground) 85%);
+
+            .current {
+                border-color: contrastText($alternative, 25%, 75%);
+            }
+
+            border-color: transparent;
+
+            &:hover {
+                color: contrastText($alternative, 25%, 75%);
+                border-color: contrastText($alternative, 25%, 75%);
+            }
+
+            &.button {
+                border-color: contrastText($alternative, 25%, 75%);
+            }
+
+            &.button:active {
+                margin-top: 1px;
+                border-color: contrastText($alternative, 25%, 75%);
+            }
+        }
+
+        backdrop-filter: blur(4px) !important;
+        -webkit-backdrop-filter: blur(4px) !important;
+
+
+        &.highlight {
+            background: contrastText($alternative, 25%, 75%);
+            color: contrastText($alternative, 25%, 75%);
+            border-color: transparent;
+
+            a {
+                color: contrastText($alternative, 25%, 75%);
+
+                .current {
+                    border-color: contrastText($alternative, 25%, 75%);
+                }
+            }
+        }
+
+        &.footer {
+            background: lighten($footer, 20%);
+            color: darken($footer, 20%);
+            // border-color: transparent;
+
+            a {
+                color: darken($footer, 20%);
+
+                .current {
+                    border-color: darken($calltoaction, 35%);
+                }
+            }
+        }
+
+        &.black {
+            background: contrastText($alternative, 25%, 75%);
+            ;
+            ;
+            color: lighten($alternative, 20%);
+            // border-bottom: 3px $alternative solid;
+
+            a {
+                color: lighten($alternative, 20%);
+
+                .current {
+                    border-color: darken($alternative, 35%);
+                }
+
+                &.button {
+                    border-bottom: 2px darken($alternative, 35%) solid;
+                }
+
+                &.button:hover {
+                    cursor: hand;
+                    background: rgba(0, 0, 0, 0.1);
+                }
+
+                &.button:active {
+                    margin-top: 1px;
+                    border-bottom: 1px darken($alternative, 35%) solid;
+                }
+            }
+        }
+
+        &.frosted-glass {
+            background: linear-gradient(rgba(255, 255, 255, 1.0), rgba(255, 255, 255, 0.8));
+
+            a {
+                color: darken($alternative, 20%);
+
+                &.current {
+                    color: darken($alternative, 35%) !important;
+                    border-color: darken($alternative, 35%) !important;
+                }
+
+                &:hover {
+                    color: darken($alternative, 35%);
+                    border-color: darken($alternative, 35%);
+                }
+
+                &.button {
+                    border-bottom: 2px darken($alternative, 35%) solid;
+                }
+
+                &.button:hover {
+                    cursor: hand;
+                    background: rgba(0, 0, 0, 0.1);
+                }
+
+                &.button:active {
+                    margin-top: 1px;
+                    border-bottom: 1px darken($alternative, 35%) solid;
+                }
+            }
+
+        }
+
+        &.dark-glass-off {
+            background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8));
+        }
+
+        &.dark-glass {
+            background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.2));
+
+            ul.sub-menu {
+                background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.6)) !important;
+                backdrop-filter: blur(8px) !important;
+                -webkit-backdrop-filter: blur(8px) !important;
+
+                &>li {
+                    backdrop-filter: blur(8px) !important;
+                    -webkit-backdrop-filter: blur(8px) !important;
+
+                    &:hover {
+                        background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.2)) !important;
+                    }
+                }
+            }
+
+            a {
+                font-weight: 400;
+                text-shadow: 1px 1px 2px rgba(133, 203, 245, 0.4);
+
+                &.current {
+                    color: lighten($alternative, 55%) !important;
+                    border-color: ligten($alternative, 55%) !important;
+                }
+
+                &:hover {
+                    color: lighten($alternative, 55%);
+                    border-color: lighten($alternative, 35%);
+                }
+
+                color: lighten($alternative, 55%) !important;
+
+                &.button {
+                    color: ligten($alternative, 55%) !important;
+                    border: 1px rgba(0, 0, 0, 0.5) solid !important;
+                    border-bottom: 2px rgba(0, 0, 0, 0.5) solid !important;
+                }
+
+                &.button:hover {
+                    cursor: hand;
+                    background: rgba(0, 0, 0, 0.1);
+                }
+
+                &.button:active {
+                    margin-top: 1px;
+                    border: 1px rgba(0, 0, 0, 0.5) solid !important;
+                    border-bottom: 1px rgba(0, 0, 0, 0.5) solid !important;
+                }
+            }
+        }
+
+    }
+}

@@ -1,0 +1,7 @@
+{{ if eq .Type "home" }}
+  {{ partial "masthead/hero.html" . }}
+{{ else if eq .Type "poop" }}
+  no way!
+{{ else }}
+  {{ partial "masthead/subpage.html" . }}
+{{ end }}

@@ -1,0 +1,51 @@
+{{ $permalink := .Permalink }}
+
+{{ $show := true }}
+{{ if not $permalink }}
+  {{ $show = false }}
+{{ end }}
+{{ if eq ((.Resources.ByType "image") | len) 0 }}
+  {{ $show = false }}
+{{ end }}
+
+<!-- If this requires images, and no images are found, don't show it -->
+  {{/* {{ if not (.Resources.ByType "image") }}
+  {{ $show = false }}
+{{ end }}
+
+*/}}
+{{ if eq (len .Pages) 0 }}
+{{ else }}
+{{ end }}
+
+{{ if $show }}
+
+    <div class="article-summary-container">
+      <a href="{{ $permalink }}">
+        <div class="article-summary-image-container">
+          {{ $page := . }}
+          {{- range first 1 (.Resources.ByType "image") }}
+            {{ if gt .Width 1000 }}
+              <figure class="article-thumb">
+                {{ with .Resize "1000x" }}
+                  {{ partial "gallery/thumb.html" (dict "context" . "keyword" .Name "page" $page ) }}
+                {{ end }}
+                <figcaption>{{ .Description }}</figcaption>
+              </figure>
+            {{ end }}
+          {{ end }}
+        </div>
+        <h4 class="title-area tag-cloud-size-{{ math.Min 9 (len .Pages) }}">
+          {{ default "Untitled Page" .Title }}
+        </h4>
+      </a>
+
+      {{ if .Pages }}
+        ({{ len .Pages }})
+      {{ end }}
+
+
+      <!-- {{ .Type }} {{ .Kind }}<br /> -->
+      {{ .Description }}
+    </div>
+{{ end }}

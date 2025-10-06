@@ -1,0 +1,12 @@
+{{ define "page" }}
+  {{ partial "website/header.html" . }}
+
+
+  <main
+    class="home-list {{ urlize .Title }} {{ urlize .Type }} kind-{{ urlize .Kind }} section-{{ urlize .Section }} weaver-platform-default"
+  >
+    {{ partial "core/panels.html" . }}
+  </main>
+
+  {{ partial "website/footer.html" . }}
+{{ end }}

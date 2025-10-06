@@ -1,0 +1,208 @@
+{{ $context := .context }}
+{{ $page := .page }}
+{{ $taxonomy := .taxonomy }}
+{{ $taxonomies := .taxonomies }}
+{{ $term := .term }}
+{{ $terms := .terms }}
+{{ $keyword := .keyword }}
+{{ $kind := .kind }}
+
+{{/*  <h2>Related Shiz</h2>  */}}
+
+{{/*
+.context: {{ .context}}<br /><br />
+.taxonomy: {{ .taxonomy}}<br /><br />
+.taxonomies: {{ .taxonomies}}<br /><br />
+.keyword: {{ .keyword}}<br /><br />
+.keyword: {{ .keyword}}<br /><br />
+.term: {{ .term}}<br /><br />
+.terms: {{ .terms}}<br /><br />
+.kind: {{ .kind}}<br /><br />  */}}
+
+<!-- Does this require images? -->
+{{ $pages := $context.RegularPages }}
+{{ if not $pages }}
+    {{ $pages = $context.Data.Pages }}
+{{ end }}
+{{ if not $pages }}
+    {{ $pages = $context.Pages }}
+{{ end }}
+{{ if not $pages }}
+{{ $pages = $context.Data.Terms }}
+{{ end }}
+{{ if not $pages }}
+    {{ $pages = $context.Site.Data.Pages }}
+{{ end }}
+
+{{ if and $taxonomy (not $pages) }}
+    <!-- Did not find content. -->
+    {{ $pages = where $context.Site.RegularPages "Name" $taxonomy}}
+{{ end}}
+{{ if and $term (not $pages) }}
+    <!-- Did not find content. -->
+    {{ $pages = where $context.Site.RegularPages "Name" $term}}
+{{ end}}
+
+{{ if $pages }}
+    {{ $max := 100 }}
+    {{ $class := "" }}
+    {{ partial "taxonomy/terms.html" (dict "context" .context "pages" $pages "page" $page "max" $max "class" $class) }}
+{{ else }}
+    {{/*  This is a weird one. It is a taxonomy, but it doesn't have any terms?  */}}
+    {{/*  Seems to happen sometimes?  */}}
+    {{ $pages = slice }}
+    {{ range site.Pages }}
+        {{ $parentpage := . }}
+        {{ range .Pages }}
+            {{ $pagez := . }}
+            {{ $foundpage := slice}}
+            {{ if eq .Type "gallery" }}
+                {{ range $key, $value := .Params.Resources }}
+                    {{ $resource := . }}
+                    {{ range $key, $value := $resource }}
+                        {{ if eq $key "description" }}
+                        {{ else if eq $key "src"}}
+                        {{ else if index $resource $key }}
+                            {{ $v := index $resource $key }}
+                            {{ if in $v $term}}
+                                {{ range $pagez.Resources }}
+                                    {{ if in .Permalink $resource.src }}
+                                        {{ $foundpage = $pagez }}
+                                    {{ end }}
+                                {{ end }}
+                            {{ end }}
+                        {{ end }}
+                    {{ end }}
+                {{ end }}
+            {{ end }}
+            {{ if (.Param $taxonomy)}}
+                {{ if in (.Param $taxonomy) $term }}
+                    {{ $foundpage = $pagez }}
+                    {{ end}}
+            {{ end }}
+            {{ if $foundpage }}
+                {{ $pages = $pages | append $foundpage }}
+            {{ end }}
+        {{ end }}
+    {{ end }}
+
+    {{ if $context.Param "relatedTitle" }}
+        <h4 class="alternative">{{ $context.Param "relatedTitle" }}</h4>
+    {{ else if $context.Parent.Param "relatedTitle" }}
+        <h4 class="alternative">{{ $context.Parent.Param "relatedTitle" }}</h4>
+    {{ else if $pages }}
+        <h4 class="alternative">See More {{ $context.Title }}</h4>
+    {{ end }}
+
+    <ul class="articles summary-subpages">
+        {{ $counter := 0 }}
+        {{ $isanythingfeatured := false }}
+        {{ range ($pages | uniq)}}
+            {{ if in .Params.tags "featured"}}
+                {{ $isanythingfeatured = true }}
+            {{ end }}
+        {{ end }}
+        {{ range ($pages | uniq)}}
+            {{ $featured := ""}}
+            {{ if and (not $isanythingfeatured) (eq $counter 0) }}
+                <!-- Only do this if nothing else is featured -->
+                {{ $featured = "featured"}}
+            {{ end }}
+            {{ if in .Params.tags "featured"}}
+                {{ $featured = "featured"}}
+            {{ end }}
+
+            {{ $thumb := ""}}
+            {{ if in .Params.tags "featured"}}
+                {{ $thumb = "thumb"}}
+            {{ end }}
+
+            <li class="article-item {{ $featured }} {{ $thumb }}">
+                {{ partial "article/summary.html" (dict "page" . "context" . "term" $term) }}
+            </li>
+            {{ $counter = add $counter 1 }}
+        {{ end  }}
+    </ul>
+
+{{ end }}
+
+{{/*  <h4>TREE NAV</h4>
+{{ $keyword }}
+<br />
+$context: {{ $context }}<br />
+$taxonomy: {{ $taxonomy }}<br />
+$taxonomies: {{ $taxonomies }}<br />
+$term: {{ $term }}<br />
+$terms: {{ $terms }}<br />
+$keyword: {{ $keyword }}<br />  */}}
+
+    {{ $home := $context.Site.Home }}
+
+    {{ if $keyword }}
+        {{/*  <div class="css-treeview box">
+            <ul>
+                {{ template "section-tree-nav" (dict "context" $home "term" $term "terms" $terms "keyword" $keyword ) }}
+            </ul>
+        </div>  */}}
+    {{end}}
+
+
+
+
+    {{ define "section-tree-nav" }}
+        {{ $context := .context }}
+        {{ $term := .term }}
+        {{ $terms := .terms }}
+        {{ $keyword := .keyword }}
+
+        {{ $context.Sections.Reverse }}
+
+            {{ range $context.Sections.Reverse}}
+
+
+                    {{ range .Pages }}
+
+                        {{/*  <b>{{ .Title}}</b><br />  */}}
+                        {{/*  term: {{ $term }}<br />
+                        terms: {{ $terms }}<br />
+                        keyword: {{ $keyword }}<br /><br />
+                        params: {{ .Params }}<br />
+                        in term param? {{ .Param $term }}<br />
+                        in terms param? {{ .Param $terms }}<br />
+
+                        in .Params $keyword? {{ in .Params $keyword }}<br />
+                        in .Params $term? {{ in .Params $term }}<br />
+                        in .Params $terms? {{ in .Params $terms }}<br />
+                        <br />  */}}
+
+    {{/*
+                        params: {{ .Params }}<br />
+
+                */}}
+                        {{ $thistermvalue := .Param $term }}
+                        {{/*  $thistermvalue '{{ $thistermvalue }}' has {{ $keyword }}<br /><br />  */}}
+
+                        {{ $lkeyword := lower $keyword }}
+                        {{ $ukeyword := upper $keyword }}
+
+                        {{ if in $thistermvalue $ukeyword }}
+                        <li>
+
+                            {{/*  {{ $term }} is {{ $keyword }}<br />  */}}
+                            <a href="{{ .RelPermalink}}">{{ .Title }}</a>
+                        </li>
+                        {{ end }}
+                        {{ if in $thistermvalue $lkeyword }}
+                        <li>
+                            {{/*  {{ $term }} is {{ $keyword }}<br />  */}}
+                            <a href="{{ .RelPermalink}}">{{ .Title }}</a>
+                        </li>
+                        {{ end }}
+
+
+
+                    {{ end }}
+                    {{ template "section-tree-nav" (dict "context" . "term" $term "terms" $terms "keyword" $keyword ) }}
+            {{ end }}
+
+    {{ end }}

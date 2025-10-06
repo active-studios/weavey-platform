@@ -1,0 +1,64 @@
+{{ define "page" }}
+  {{ partial "website/header.html" . }}
+
+  {{ $page := . }}
+
+  <main
+    class="home-list {{ urlize .Title }} {{ urlize .Type }} kind-{{ urlize .Kind }} section-{{ urlize .Section }} weaver-platform-default"
+  >
+    {{ if .Data.Pages }}
+          {{ partial "core/panels.html" . }}
+    {{ else }}
+        <section
+          class="default panel {{ .Params.background }} {{ if .Params.summary }}
+            summary-{{ .Params.summary }} summary-{{ .Params.summary }}s
+          {{ end }} {{ .Params.name }} {{ urlize .Title }} weaver-platform-default"
+        >
+          <article
+            class="container {{ .Kind }}-{{ .Type }} {{ .Params.usage }} {{ .Params.name }} {{ urlize .Title }} weaver-platform-default"
+          >
+            {{ partial "core/columns.html" . }}
+          </article>
+        </section>
+    {{ end }}
+  </main>
+
+  {{/*  <main
+    class="subpage subpage-list {{ urlize .Title }}
+     {{ urlize .Type }} kind-{{ urlize .Kind }} section-{{ urlize .Section }} weaver-platform-default"
+  >
+    <section
+      class="subpage subpage-list {{ urlize .Title }} weaver-platform-default"
+    >
+      <article
+        class="container subpage-list {{ urlize .Title }} weaver-platform-default"
+      >
+        <div>
+          {{ partial "nav/breadcrumbs.html" . }}
+          {{ if not (strings.Contains .Content "<h1") }}
+            <h1 id="{{ urlize .Title }}" class="subpage-list">{{ .Title }}</h1>
+          {{ end }}
+          {{ partial "core/columns.html" . }}
+        </div>
+      </article>
+    </section>
+
+    <section
+      class="subpage subpage-list  {{ urlize .Title }} weaver-platform-default"
+    >
+      <article
+        class="container subpage-list  {{ urlize .Title }} weaver-platform-default"
+      >
+        {{ $term := strings.TrimRight "s" .Type }}
+        {{ $keyword := urlize .Name }}
+        {{ partial "taxonomy/related.html" (dict "context" . "page" $page "kind" .Kind "term" $term "terms" .Type "keyword" $keyword ) }}
+      </article>
+    </section>
+  </main>
+
+  {{- if and (not hugo.IsProduction) (ne site.Params.env "production") -}}
+    <div class="debug">SUBPAGE LIST</div>
+  {{- end -}}
+
+  {{ partial "website/footer.html" . }}  */}}
+{{ end }}

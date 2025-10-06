@@ -1,0 +1,248 @@
+/* Weaver Platform - Website - Footer */
+
+
+footer {
+    border-top: 3px solid transparent;
+
+    background: contrastText($footer, 10%);
+    color: contrastText($footer);
+    padding: 0;
+
+    .footer-logo {
+        // border: 5px aqua solid;
+        text-align: center;
+        padding: $gutter;
+        font-size: 20px;
+        color: darken($footer, 0%);
+    }
+
+
+    .footer-copyright {
+        margin: 0;
+        padding: 0 0 0 0;
+        text-align: center;
+        font-size: 1.4rem;
+        background: transparent;
+        color: lighten($footer, 25%);
+    }
+
+    .footer-sitemap {
+        margin: 0;
+        padding: 0 0 $gutter 0;
+        text-align: center;
+        font-size: 1.4rem;
+
+
+        a {
+            color: contrastText($footer);
+            text-transform: uppercase;
+            font-size: 1.4rem;
+
+            &:hover {
+                color: contrastText($footer);
+
+            }
+
+        }
+    }
+
+    .footer-links-container {
+        margin: auto;
+
+        nav {
+            margin: auto;
+            width: 100%;
+
+            ul {
+                margin: auto;
+                width: 40%;
+
+                li {
+                    a {
+                        font-weight: bold;
+                    }
+                }
+            }
+        }
+
+        margin: 0;
+
+        .footer-flex {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+
+            .footer-column {
+                flex: 1;
+                flex-basis: 30%;
+                margin: 0 0 20px 0;
+                text-align: center;
+
+                .footer-links {
+                    margin: 0;
+                    text-align: center;
+
+                }
+
+            }
+        }
+    }
+
+    p {
+        color: darken($footer, 20%);
+    }
+
+    ul {
+        margin: 0;
+        padding: 0;
+
+        li {
+            list-style-type: none;
+            margin: 10px 0;
+            line-height: 1.8rem;
+
+            a {
+                font-size: 1.3rem;
+                text-decoration: none;
+                color: darken($footer, 20%);
+
+                &:hover {
+                    &[href] {
+                        text-decoration: underline;
+                    }
+
+                    color: darken($footer, 20%);
+                }
+            }
+        }
+    }
+
+    a {
+        color: contrastText($footer);
+
+        &:hover {
+            color: contrastText($footer, 35%);
+        }
+
+        &.term {
+            text-transform: capitalize;
+            color: darken($footer, 25%) !important;
+        }
+
+    }
+
+
+    .footer-container {
+        min-height: 200px;
+    }
+
+    .footer-social {
+        margin: 90px 0;
+
+        p {
+            color: lighten($primary, 40%);
+            font-weight: 600;
+            font-size: 1.84rem !important;
+            margin: 0 auto;
+        }
+
+        ul.contact-social-icons {
+            li {
+                a {
+                    color: lighten($primary, 50%);
+                    font-size: 4.8rem !important;
+
+                    &:hover {
+                        color: lighten($primary, 100%);
+                    }
+                }
+            }
+        }
+    }
+}
+
+.dark {
+    footer {
+        .footer-search {
+            margin: $gutter 0 0 0;
+            text-align: center;
+            padding: $gutter;
+            font-size: 20px;
+            color: color-mix(in srgb, $primary, var(--color-foreground) 50%) !important;
+
+            input {
+                width: 60%;
+                padding: 5px;
+                border: 2px color-mix(in srgb, $primary, var(--color-foreground) 50%) solid !important;
+                background: color-mix(in srgb, $primary, var(--color-background) 50%) !important;
+                color: color-mix(in srgb, $primary, var(--color-foreground) 50%) !important;
+
+                &:hover {
+                    border-color: color-mix(in srgb, $primary, var(--color-foreground) 50%) !important;
+                    background: color-mix(in srgb, $primary, var(--color-background) 50%) !important;
+                    color: color-mix(in srgb, $primary, var(--color-foreground) 50%) !important;
+                }
+
+                outline: transparent !important;
+
+                &:focus {
+                    color: color-mix(in srgb, $primary, var(--color-foreground) 50%) !important;
+                    outline: 2px color-mix(in srgb, $primary, var(--color-background) 50%) solid !important;
+                    border: 2px color-mix(in srgb, $primary, var(--color-foreground) 50%) solid !important;
+                    background: color-mix(in srgb, $primary, var(--color-background) 50%) !important;
+
+                    &::placeholder {
+                        color: color-mix(in srgb, $primary, var(--color-foreground) 50%) !important;
+                    }
+                }
+
+                &::placeholder {
+                    color: color-mix(in srgb, $primary, var(--color-foreground) 50%) !important;
+                }
+            }
+        }
+    }
+}
+
+.light {
+    footer {
+        .footer-search {
+            margin: $gutter 0 0 0;
+            text-align: center;
+            padding: $gutter;
+            font-size: 20px;
+            color: color-mix(in srgb, $primary, var(--color-foreground) 50%) !important;
+
+            input {
+                width: 60%;
+                padding: 5px;
+                border: 2px color-mix(in srgb, $primary, var(--color-foreground) 50%) solid !important;
+                background: color-mix(in srgb, $primary, var(--color-background) 60%) !important;
+                color: color-mix(in srgb, $primary, var(--color-foreground) 50%) !important;
+
+                &:hover {
+                    border-color: color-mix(in srgb, $primary, var(--color-foreground) 50%) !important;
+                    background: color-mix(in srgb, $primary, var(--color-background) 50%) !important;
+                    color: color-mix(in srgb, $primary, var(--color-foreground) 50%) !important;
+                }
+
+                outline: transparent !important;
+
+                &:focus {
+                    color: color-mix(in srgb, $primary, var(--color-foreground) 50%) !important;
+                    outline: 2px color-mix(in srgb, $primary, var(--color-background) 50%) solid !important;
+                    border: 2px color-mix(in srgb, $primary, var(--color-foreground) 50%) solid !important;
+                    background: color-mix(in srgb, $primary, var(--color-background) 50%) !important;
+
+                    &::placeholder {
+                        color: color-mix(in srgb, $primary, var(--color-foreground) 80%) !important;
+                    }
+                }
+
+                &::placeholder {
+                    color: color-mix(in srgb, $primary, var(--color-foreground) 80%) !important;
+                }
+            }
+        }
+    }
+}

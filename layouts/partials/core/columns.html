@@ -1,0 +1,75 @@
+{{- $outer := .Content -}}
+
+{{ if eq .Type "music" }}
+
+  {{ $outer = replaceRE "(.*)\n" "<div class=\"music-line\">$1</div>" $outer }}
+
+
+  <!-- Instructions -->
+  {{ $outer = replaceRE `(\(ICON\(([a-zA-Z0-9_-]*)\)\))` "<div class='music-icon'><div><i class='fa-solid fa-${2}'></i></div></div>" $outer }}
+  {{ $outer = replaceRE `(\(BACKUP\(([a-zA-Z0-9_.\?\, ]*)\)\))` "<div class='music-vocal'><div><div class='icon'><i class='fa-solid fa-people-group'></i></div><div class='words'>${2}</div></div></div>" $outer }}
+  {{ $outer = replaceRE `(\(NOTE\(([a-zA-Z0-9_.\?\,\- ]*)\)\))` "<div class='music-note'><div>${2}</div></div>" $outer }}
+
+
+  <!-- Chords (# b o 0 should be superset) -->
+  {{ $outer = replaceRE `(\(([a-zA-Z0-9_\/\#]*)\))` "<div class='music-chord'><div>${2}</div></div>" $outer }}
+
+
+  <!-- Sections -->
+  {{ $outer = replaceRE `(\[([a-zA-Z0-9_\-]*)\])` "<div class='music-section'><div>${2}</div></div>" $outer }}
+
+  {{/* {{ $outer = replaceRE `([\n])` "<div class='music-line'><div>${2}</div></div>"  $outer }}
+  */}}
+  {{ $outer = replaceRE `<p></p>` "" $outer }}
+  {{ $outer = replaceRE "(?s)(.*)" "<div class=\"music-container\">$1</div>" $outer }}
+{{ end }}
+
+
+<!-- regular pages: {{ .Permalink }} - {{ .Kind }} {{ .Type }}<br /> -->
+{{- $cols := .Params.columns -}}
+{{- $items := split $outer "===" -}}
+{{- $header := index ( $items ) 0 -}}
+
+{{- replaceRE `<p>$` "" $header | safeHTML -}}
+{{/* {{- $inner := index ( $items ) 1 -}}
+{{- $footer := index ( $items ) 2 -}}
+{{- $footer = replaceRE `</p>$` "" $footer | safeHTML -}} */}}
+{{- $class := (.Param "summary") -}}
+{{- if and (not $class) .Parent -}}
+  {{- $class := (.Parent.Param "summary") -}}
+  {{- if and (not $class) .Parent.Parent -}}
+    {{- $class := (.Parent.Parent.Param "summary") -}}
+  {{- end -}}
+{{- end -}}
+{{ $class = "" }}
+{{- if and (not $class)  site.Params.weaverplatform -}}
+  {{- $wp := site.Params.weaverplatform -}}
+  {{- range $wp -}}
+    {{ $class = .summary -}}
+  {{- end -}}
+{{- end -}}
+{{- if and (not $class) -}}
+  {{ $class = "default" }}
+{{- end -}}
+{{ range $n, $inner := $items }}
+  {{ if and (ne $n 0) $inner }}
+    <div class="panel responsive-row responsive-row-{{ $class }}">
+      {{ $sections := split $inner "<hr>" }}
+      {{ if $sections }}
+        {{- range $sections }}
+          {{ $html := replaceRE `^</p>` "" . }}
+          {{ if and (trim $html "\n") }}
+            <div class="responsive-column">
+              <div class="responsive-column-inner">
+                {{ $html | safeHTML }}
+              </div>
+            </div>
+          {{ end }}
+        {{ end -}}
+      {{ end }}
+    </div>
+    {{ if trim $inner "\n " }}
+      <hr class="columns" />
+    {{ end }}
+  {{ end }}
+{{ end }}

@@ -1,0 +1,82 @@
+/* Weaver Platform - Layout - Website - Links */
+
+
+
+a {
+  text-decoration: none;
+  color: color-mix(in srgb, $calltoaction, var(--color-foreground) 15%);
+
+  &.primary {
+    font-weight: bold;
+    color: color-mix(in srgb, $primary, var(--color-foreground) 15%);
+
+    &:hover {
+      color: color-mix(in srgb, $primary, var(--color-background) 0%);
+      // text-decoration: none;
+    }
+  }
+
+  &.alternative {
+    font-style: italic;
+    color: color-mix(in srgb, $alternative, var(--color-foreground) 15%);
+
+    &:hover {
+      color: color-mix(in srgb, $alternative, var(--color-background) 0%);
+      // text-decoration: none;
+    }
+  }
+
+  &:hover {
+    color: color-mix(in srgb, $calltoaction, var(--color-background) 0%);
+
+    &[href] {
+      text-decoration: underline;
+    }
+
+    &.h3base {
+      text-decoration: none;
+    }
+  }
+
+  // &.button {
+  //     margin: 0 0 0 30px;
+  //     font-size: 1.8rem;
+  //     color: darken($calltoaction, 60);
+  //     border: 1px darken($calltoaction, 60) solid;
+  //     border-radius: 4px;
+  //     letter-spacing: 1.5px;
+  //     padding: 5px 5px 5px 10px;
+
+  //     & span:after {
+  //         margin-left: 5px;
+  //         content: "▶";
+  //     }
+
+  //     &:hover {
+  //         background-color: darken($calltoaction, 20);
+  //         border-color: darken($calltoaction, 20);
+  //         color: lighten($calltoaction, 50);
+  //     }
+  // }
+}
+
+
+nav,
+header,
+footer {
+  a {
+    text-decoration: none !important;
+
+    &:hover {
+      text-decoration: none !important;
+    }
+  }
+}
+
+a.button {
+  text-decoration: none !important;
+
+  &:hover {
+    text-decoration: none !important;
+  }
+}

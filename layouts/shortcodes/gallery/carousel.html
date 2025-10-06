@@ -1,0 +1,204 @@
+{{ $header := .Get "header" -}}
+{{ $show_description := .Get "show_description" -}}
+{{ $params := .Params -}}
+{{ $tag := or (.Get "tag") (.Get "tags") -}}
+{{ $term := or (.Get "term") (.Get "terms") -}}
+{{ $taxonomy := .Get "taxonomy" -}}
+{{ $tag := .Get "tag" -}}
+{{ $pageSize := default 4 (.Get "pageSize") -}}
+{{ $type := "gallery" }}
+{{ if .Get "type" }}
+  {{ $type = (.Get "type") }}
+{{ end }}
+{{ if eq $header ".type" }}
+  {{ $header = title $type }}
+{{ end }}
+
+{{/* perPage: 3,
+  rewind : true,
+*/}}
+
+
+<div class="gallery-carousel-header">
+  {{/*  <div class="gallery-carousel-header-button">
+    {{ partial "button/calltoaction.html" (
+      dict    "title" (.Get "linkText")
+      "link" (.Get "link")
+      "class" "link"
+      )
+    -}}
+  </div>  */}}
+  {{ if $header }}
+    <div class="gallery-carousel-header-description">
+      <h4>{{ $header -}}</h4>
+    </div>
+  {{ end }}
+</div>
+<div class="gallery-carousel-body">
+  <section
+    class="splide tag-{{ urlize $tag }}{{ urlize $taxonomy }}-splide"
+    aria-label="Basic Structure Example"
+  >
+    <div class="splide__track">
+      <ul class="splide__list">
+        {{ $count := 0 -}}
+        {{ range $.Site.Pages -}}
+          {{ $image_type_arr := split .RelPermalink "." -}}
+          {{ $image_ext := index $image_type_arr 1 -}}
+          {{ $page := . -}}
+          {{ $subpages := .Site.RegularPages | first 0 -}}
+          {{ if or $taxonomy $term -}}
+            {{ range $.Site.Pages -}}
+              {{ $parent := . }}
+              {{ if .Parent -}}
+                {{ if eq .Section $term -}}
+                  {{ $subpages = .Pages -}}
+                {{ end -}}
+                {{ if eq .Type $taxonomy -}}
+                  {{ $subpages = .Parent.Pages -}}
+                {{ end -}}
+              {{ end -}}
+              {{ if .Parent -}}
+                {{ if eq .Type $taxonomy -}}
+                  {{ $subpages = .Parent.Pages -}}
+                {{ end -}}
+              {{ end -}}
+            {{ end -}}
+          {{ end -}}
+
+          {{ if not $subpages -}}
+            {{ $subpages = .Data.Terms -}}
+          {{ end -}}
+          {{ if not $subpages -}}
+            {{ $subpages = .Site.Data.Pages -}}
+          {{ end -}}
+          {{ if not $subpages -}}
+            {{ $subpages = .Pages -}}
+          {{ end -}}
+          {{ $show := true -}}
+          {{ if and $tag (eq .Type $type) -}}
+            {{ $counter := 0 }}
+            {{ $gallery := . }}
+            {{ with $gallery.Params.tags -}}
+              {{ if in . $tag -}}
+                {{ $count = add $count 1 -}}
+                {{ $counter = add $counter 1 -}}
+                <li class="splide__slide">
+                  <div class="gallery-carousel-item">
+                    {{ $thumb := slice }}
+                    {{ range $gallery.Params.Resources -}}
+                      {{ if and (not $thumb) .src }}
+                        {{ $thumb = . -}}
+                      {{ end }}
+                    {{ end }}
+                    {{ if $thumb }}
+                      {{ range $page.Resources -}}
+                        {{ if in .RelPermalink $thumb.src -}}
+                          {{ with .Resize "400x" -}}
+                            {{ partial "gallery/thumb.html" (dict "context" . "tag" $tag "page" $page ) -}}
+                          {{ end -}}
+                        {{ end -}}
+                      {{ end }}
+                    {{ else }}
+                      {{ range $page.Resources.ByType "image" | first 1 -}}
+                        {{ with .Resize "400x" -}}
+                          {{ partial "gallery/thumb.html" (dict "context" . "tag" $tag "page" $page  ) -}}
+                        {{ end -}}
+                      {{ end -}}
+                    {{ end }}
+                    {{ partial "core/title.html" (dict "context" $page "level" 3 "counter" 0) }}
+                    {{ if $show_description }}
+                      <div class="gallery-carousel-footer">
+                        {{ if $page.Params.description -}}
+                          <p class="gallery-carousel-item-description">
+                            {{ $page.Params.description }}
+                          </p>
+                        {{ end -}}
+                        {{ if $page.Params.footer -}}
+                          <p class="gallery-carousel-item-footer">
+                            {{ $page.Params.footer }}
+                          </p>
+                        {{ end -}}
+                      </div>
+                    {{ end }}
+                  </div>
+                </li>
+              {{ end }}
+            {{ end }}
+          {{ else }}
+            {{ if and $subpages (ne .Kind "taxonomy") -}}
+              {{ if and $taxonomy  -}}
+                {{ if or (eq .Type $taxonomy) (eq .Section $taxonomy) -}}
+                  {{ if or (eq ($page.Param "carousel") "false") (eq ($page.Param "carousel") false) }}
+                    <!-- skip -->
+                  {{ else }}
+                    <li class="splide__slide">
+                      <div class="gallery-carousel-item">
+                        {{ range $page.Resources.ByType "image" | first 1 -}}
+                          {{ with .Resize "400x" -}}
+                            {{ partial "gallery/thumb.html" (dict "context" . "tag" $tag "page" $page  ) -}}
+                          {{ end -}}
+                        {{ end -}}
+                        {{ partial "core/title.html" (dict "context" $page "level" 3 "counter" 0) }}
+                      </div>
+                    </li>
+                  {{ end }}
+                {{ end }}
+              {{ end }}
+              {{ if and $term -}}
+                  {{ range $subpages -}}
+                    {{ $subpage := . }}
+                    {{ if or (eq .Parent.Type $term) (eq .Parent.Section $term) -}}
+                      {{ if eq (urlize $page.Title) $term }}
+                        <li class="splide__slide">
+                          <div class="gallery-carousel-item">
+                            {{ range .Resources.ByType "image" | first 1 -}}
+                              {{ with .Resize "400x" -}}
+                                {{ partial "gallery/thumb.html" (dict "context" . "tag" $tag "page" $subpage  ) -}}
+                              {{ end -}}
+                            {{ end -}}
+                            {{ partial "core/title.html" (dict "context" . "level" 3 "counter" 0) }}
+                          </div>
+                        </li>
+                      {{ end }}
+                    {{ end }}
+                  {{ end }}
+              {{ end }}
+            {{ end }}
+          {{ end }}
+        {{ end }}
+      </ul>
+    </div>
+  </section>
+  <script>
+    var splide = new Splide(".tag-{{ urlize $tag }}{{ urlize $taxonomy }}-splide", {
+      type: "loop",
+      perPage: "{{ $pageSize }}",
+      gap: "2rem",
+      classes: {
+        pagination: "splide__pagination carousel-pagination",
+        page: "splide__pagination__page carousel-page",
+      },
+      breakpoints: {
+        2000: {
+          perPage: 3,
+          gap: ".7rem",
+        },
+        1800: {
+          perPage: 3,
+          gap: ".7rem",
+        },
+        1200: {
+          perPage: 2,
+          gap: ".7rem",
+        },
+        800: {
+          perPage: 1,
+          gap: ".7rem",
+        },
+      },
+    });
+
+    splide.mount();
+  </script>
+</div>

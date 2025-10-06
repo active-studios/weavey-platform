@@ -1,0 +1,171 @@
+{{ $page := .page }}
+{{ $context := .context }}
+{{ if not $context }}
+  {{ $context = . }}
+{{ end }}
+{{ $term := .term }}
+{{ $show_ordinal := .show_ordinal }}
+{{ if not $show_ordinal }}
+  {{ $show_ordinal = false }}
+{{ end }}
+
+{{ $permalink := $context.Permalink }}
+
+{{ $sow := true }}
+{{ $pages := slice }}
+{{ if .pages }}
+  {{ $pages = .pages }}
+{{ end }}
+{{ if not $pages }}
+  {{ $pages = $context.RegularPages }}
+{{ end }}
+{{ if not $pages }}
+  {{ $pages = $context.Data.Pages }}
+{{ end }}
+{{ if not $pages }}
+  {{ $pages = $context.Pages }}
+{{ end }}
+{{ if not $pages }}
+  {{ $pages = $context.Data.Terms }}
+{{ end }}
+
+{{ $show := false }}
+{{ $pagecount := 0 }}
+{{ range $pages }}
+  {{ $show = true }}
+  {{ $pagecount = add $pagecount 1 }}
+{{ end }}
+
+{{ if and (in $context ".md") (in $context "/gallery/") }}
+  {{ $show = true }}
+  {{ $pagecount = add $pagecount 1 }}
+{{ end }}
+
+{{ if eq (($context.Resources.ByType "image") | len) 0 }}
+  <!-- is a picture required??? -->
+{{ end }}
+{{ if $context.Draft }}
+  {{ $show = false }}
+{{ end }}
+
+{{ if $show }}
+  {{ $src := "" }}
+  {{ if .image }}
+    {{ $src = .image }}
+  {{ end }}
+  {{ range $context.Params.Resources }}
+    {{ if and $term (not $src) }}
+      {{ $resource := . }}
+      {{ range $key, $value := $resource }}
+          {{ if eq $key "description" }}
+          {{ else if in $value $term }}
+            {{ range $context.Resources }}
+              {{ if in .Permalink $resource.src }}
+                {{ $src = .Permalink }}
+              {{ end }}
+            {{ end }}
+          {{ end }}
+      {{ end }}
+    {{ end }}
+  {{ end }}
+  {{ range $context.Params.Resources }}
+      {{ $resource := . }}
+      {{ if not $src }}
+        {{ range $key, $value := $resource }}
+            {{ if and (eq $key "tags") (in $value "thumb")}}
+              {{ range $context.Resources }}
+                {{ if in .Permalink $resource.src }}
+                  {{ $src = .Permalink }}
+                {{ end }}
+              {{ end }}
+            {{ end }}
+        {{ end }}
+      {{ end }}
+      {{ if not $src }}
+        {{ range $key, $value := $resource }}
+            {{ if and (eq $key "tags") (in $value "featured")}}
+              {{ range $context.Resources }}
+                {{ if in .Permalink $resource.src }}
+                  {{ $src = .Permalink }}
+                {{ end }}
+              {{ end }}
+            {{ end }}
+        {{ end }}
+      {{ end }}
+    {{ if not $src }}
+        {{ range $key, $value := $resource }}
+            {{ if eq $key "src"  }}
+              {{ range $context.Resources }}
+                {{ if in .Permalink $resource.src }}
+                  {{ $src = .Permalink }}
+                {{ end }}
+              {{ end }}
+            {{ end }}
+        {{ end }}
+      {{ end }}
+  {{ end }}
+  {{ if not $src }}
+    {{ range $context.Resources.ByType "image" }}
+      {{ if not $src }}
+        {{ $src = .Permalink }}
+      {{ end }}
+    {{ end }}
+  {{ end }}
+
+  {{ $url := "" }}
+  {{ $url = $context.Permalink }}
+  {{ if $pages }}
+    {{ $url = $context.Permalink }}
+  {{ end }}
+
+  {{ if and $pages (gt ($pagecount) 0) }}
+    {{ $url = $context.Permalink }}
+  {{ end }}
+
+  <div class="article-summary-container" data-links-count="{{ $pagecount }}">
+    <div class="article-summary-inner">
+      <div class="article-summary-inner-2">
+        <div class="article-summary-text">
+          <div class="article-summary-image-container">
+            {{ partial "gallery/thumb.html" (dict "image" $src "keyword" .Name "page" $page "context" $context "url" $url) }}
+          </div>
+
+          {{ if or .Draft $context.Draft }}
+            <div class="article-draft">
+              <i class="fa-solid fa-compass-drafting"></i>
+            </div>
+          {{ end }}
+
+          {{ partial "core/title.html" (dict "page" $context "context" $context "level" 3 ) }}
+
+
+          {{/*  <div class="article-summary-text-title">
+            <div
+              class="article-summary-count {{ if $show_ordinal }}
+                show
+              {{ else }}
+                hide
+              {{ end }}"
+            >
+              <h2>{{ .counter }}</h2>
+            </div>
+            <a href="{{ $url }}">
+              <div>
+                <h4
+                  class="title-area tag-cloud-size-{{ math.Min 9 ($pagecount) }}"
+                >
+                  {{ default "Untitled Page" ($context.Title | markdownify) }}
+                </h4>
+              </div>
+            </a>
+          </div>  */}}
+        </div>
+        <div class="article-summary-descrption-container">
+          <div class="article-summary-description">
+            {{ $context.Description }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{{ end }}

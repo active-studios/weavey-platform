@@ -1,0 +1,25 @@
+{{- define "main" -}}
+  {{ partial "website/header.html" . }}
+  <main
+    class="default list fourohfour {{ urlize .Title }} weaver-platform-default"
+  >
+    <section>
+      <article>
+        {{ partial "nav/breadcrumbs.html" . }}
+
+
+        <div class="FourOhFourCentered">
+          <h1>Page not found</h1>
+          <p>Sorry, that page isn't on this site.</p>
+          <p class="bottom">
+            Please use the navigation menu above, or the
+            <a href="/sitemap/">sitemap</a> linked below, to find another page.
+          </p>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  {{ partial "website/footer.html" . }}
+
+{{- end }}

@@ -1,0 +1,7 @@
+{{ partial "link/term.html" (
+  dict    "title" (.Get "title")
+  "image" (.Get "image")
+  "link" (.Get "link")
+  "class" (default "default-link" (.Get "link"))
+  )
+}}

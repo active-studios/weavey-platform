@@ -1,0 +1,17 @@
+html {
+  background-color: var(--color-background);
+}
+
+
+body {
+
+  &.mode-dark,
+  &.mode-light {
+    transition: color 2s ease-in-out, background-color 2s ease-in-out;
+  }
+
+  background: var(--color-background);
+  color: var(--color-foreground);
+  font-size: 1.8rem;
+  margin: 0px;
+}

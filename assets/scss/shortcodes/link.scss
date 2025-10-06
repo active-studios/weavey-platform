@@ -1,0 +1,32 @@
+.rich-link-container {
+
+  .rich-link-wrapper {
+    img {
+      display: block;
+      object-fit: cover;
+      aspect-ratio: 16 / 9;
+      max-height: 160px
+    }
+
+    aspect-ratio: 16 / 9;
+    height: 160px;
+    overflow: hidden;
+    margin-bottom: 25px;
+  }
+
+  a {
+
+    .arrow {
+      margin-left: 5px;
+      font-size: 1.8rem;
+    }
+
+    &>span.text:hover {
+      &[href] {
+        text-decoration: underline;
+      }
+    }
+
+  }
+
+}

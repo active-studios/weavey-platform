@@ -1,0 +1,63 @@
+{{- $taxonomy_args := .Get "taxonomy" -}}
+{{ $taxonomy_names := slice }}
+{{ if $taxonomy_args }}
+  {{- $taxonomy_names = split $taxonomy_args "," -}}
+{{ end }}
+
+{{ $size := 300 }}
+
+
+<div class="badges">
+  <ul>
+    {{ range (where .Site.Pages.ByTitle "Kind" "taxonomy" ) }}
+      {{ $taxonomy := . }}
+      {{ range $taxonomy_names }}
+        {{ $taxonomy_name := . }}
+        {{ if in (urlize $taxonomy.Name) $taxonomy_name }}
+          {{ range $taxonomy.Pages }}
+            {{ $page := . }}
+            {{ $icon := $page.Params.icon }}
+            <li style="overflow: hidden;">
+              <div
+                style="transform: scale(1.1); padding: 10px 0; overflow: hidden;"
+              >
+                <div class="badge-outer">
+                  <div class="badge">
+                    <span class="icon">
+                      <i class="fa fa-{{ $icon }}"></i>
+                    </span>
+                    <span class="text"><span>{{ .Title }}</span></span>
+                    <svg class="band" width="{{ $size }}" height="{{ $size }}">
+                      <g
+                        transform="translate(11,8) scale(1.85, 1.85) rotate(-140, 25, 25)"
+                      >
+                        <path
+                          id="circlePath"
+                          d="M25,0 C60,-5, 60,50, 25,50 C-10,50, -10,-5, 25,0"
+                          fill="none"
+                          stroke="transparent"
+                          stroke-width="2"
+                        />
+                        <text
+                          font-size="0.85rem"
+                          x="50%"
+                          y="50%"
+                          dominant-baseline="middle"
+                          text-anchor="middle"
+                        >
+                          <textPath xlink:href="#circlePath">
+                            {{ .Param "band" }}
+                          </textPath>
+                        </text>
+                      </g>
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            </li>
+          {{ end }}
+        {{ end }}
+      {{ end }}
+    {{ end }}
+  </ul>
+</div>

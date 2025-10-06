@@ -1,0 +1,33 @@
+{{ define "page" }}
+  {{ partial "website/header.html" . }}
+
+
+  <main
+    class="default list {{ urlize .Title }} {{ urlize .Type }} kind-{{ urlize .Kind }} section-{{ urlize .Section }} weaver-platform-default"
+  >
+    {{ if .Data.Pages }}
+      {{ partial "core/panels.html" . }}
+    {{ else }}
+      <section class="default list weaver-platform-default">
+        <article class="weaver-platform-default">
+          {{ partial "nav/breadcrumbs.html" . }}
+          <div>
+            {{ if not (strings.Contains .Content "<h1") }}
+              <h1 id="{{ urlize .title }}" class="default-list">
+                {{ .Title }}
+              </h1>
+            {{ end }}
+            {{ .Content }}
+          </div>
+        </article>
+      </section>
+    {{ end }}
+  </main>
+
+  {{- if or (not hugo.IsProduction) (ne site.Params.env "production") -}}
+    <div class="debug">_DEFAULT LIST</div>
+  {{ end }}
+
+  {{ partial "website/footer.html" . }}
+
+{{ end }}

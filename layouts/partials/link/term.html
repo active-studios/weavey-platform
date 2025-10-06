@@ -1,0 +1,12 @@
+<div class="rich-link-container">
+  {{ if .image }}
+    <div class="rich-link-wrapper">
+      <img src="{{ .image }}" alt="{{ .title }}" class="rich-link-image" />
+    </div>
+  {{ end }}
+  <a class="{{ .class }}" href="{{ .link }}">
+    <span class="text">{{ .title | markdownify }}</span>
+    <span class="arrow">&#9654;</span>
+  </a>
+</div>
+<div style="clear: both;"></div>

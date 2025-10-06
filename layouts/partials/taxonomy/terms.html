@@ -1,0 +1,216 @@
+{{- $context := .context -}}
+{{- $pages := .pages -}}
+{{- $taxonomy_names := .taxonomy -}}
+{{- $section_names := .section -}}
+{{- $id := .id -}}
+{{- $title := .title -}}
+{{- $max := .max -}}
+{{- $class := .class -}}
+{{ if not $class }}
+  {{ $class = "default" }}
+{{ end }}
+
+{{ define "summary" }}
+  {{ $context := .context }}
+  {{ $entry := .entry }}
+  {{ $taxonomy := .taxonomy }}
+  {{ $max := .max }}
+  {{ $class := .class }}
+  {{ $summary := $entry }}
+  {{ $kind := .kind }}
+  {{ if not $kind }}
+    {{ $kind = $context.Type }}
+  {{ end }}
+  {{ $type := .type }}
+  {{ $counter := .counter}}
+  {{ $children := slice }}
+  {{ if $taxonomy }}
+    {{ $summary = $taxonomy }}
+    {{ $children = $taxonomy.Pages }}
+  {{ else }}
+    {{ $summary = slice }}
+    {{ $children = $children | append $entry }}
+  {{ end }}
+
+  {{ if or $summary $children }}
+    {{/*  Must do this earlier, outside of summary template.  */}}
+    {{/*  {{ if $summary }}
+      <div>
+        <h5 class="terms-title">{{ $summary.Title }}: (SUPER TITLE)</h5>
+        <p>{{ $summary.Description }}</p>
+      </div>
+    {{ end }}  */}}
+    {{/* <ul class="articles summary-{{ $class }}"> */}}
+
+      {{ range $children }}
+      {{ $featured := "" }}
+      {{ $show := true }}
+      {{ if eq ((.Resources.ByType "image") | len) 0 }}
+        {{ $show = false }}
+      {{ end }}
+      {{ if in (.Param "summary") false }}
+        {{ $show = false }}
+      {{ end }}
+
+      {{ if $show }}
+        {{ if in (.Param "tags") "featured" }}
+          {{ $featured = "featured" }}
+        {{ end }}
+
+        {{ $page := . }}
+        {{ $icon := $page.Params.icon }}
+        {{ if lt $counter (add $max 1) }}
+          <li class="article-summary-item {{ $featured }} terms">
+            <div class="article-summary-container">
+              {{ with .Resources }}
+                <div class="article-summary-image-container">
+                  {{ $thumb := slice}}
+                  {{ $resource := .}}
+                  {{ range $page.Params.Resources }}
+                    {{ $pr := . }}
+                    {{ range $resource}}
+                      {{ $resource := .}}
+                      {{ if or (index $pr $kind)}}
+                        {{ if not $thumb }}
+                          {{ $src := strings.Replace $pr.src " " "%20" }}
+                          {{ $src2 := strings.Replace $resource.Permalink " " "%20" }}
+
+
+                          {{ $foo := . }}
+                          {{ $type2 := slice }}
+                          {{ if and $kind $pr }}
+                            {{ if (index $pr $kind)}}
+                            {{ $offset := 0}}
+                            {{ range (seq 10)}}
+                              {{ $items := index $pr $kind }}
+                              {{ $items := index $items $offset }}
+                              {{ $offset := add $counter 1 }}
+                                {{ if and (not $thumb) $items }}
+                                  {{ if or (in $src2 $src) (in $src $src2) }}
+                                      {{ $type2 := $items }}
+                                      {{ if and $type $type2}}
+                                        {{ if or (strings.Contains $type $type2) (strings.Contains $type2 $type) }}
+                                          {{ $thumb = $foo }}
+                                        {{ end }}
+                                  {{ end }}
+                                {{ end }}
+                              {{ end }}
+                            {{ end }}
+
+                            {{ end }}
+
+                          {{ end }}
+                        {{ end }}
+                      {{ end }}
+                    {{ end}}
+                  {{ end}}
+                  {{ if not $thumb}}
+                    {{ range .ByType "image" | first 1}}
+                      {{ if gt .Width 800 }}
+                        {{ $thumb = . }}
+                        {{ end }}
+                    {{ end }}
+                  {{end}}
+                  {{ if not $thumb}}
+                    {{ range .ByType "image" | first 1}}
+                      {{ $thumb = . }}
+                    {{ end }}
+                  {{end}}
+                  {{ if $thumb}}
+                    {{ partial "gallery/thumb.html" (dict "context" $thumb "page" $page "counter" $counter) }}
+                  {{ end }}
+              </div>
+              {{ end }}
+              <div class="term-title">
+                <a href="{{ .Permalink }}">
+                  {{ if not (and $context ($context.Param "show-ordinal")  ($context.Parent.Param "show-ordinal")) }}
+                    {{ $counter = slice }}
+                  {{ end }}
+                  {{ partial "core/title.html" (dict "page" $page "context" $context  "counter" $counter "link"  .Permalink) }}
+                  <div class="description">
+                    <p>{{ .Description }}</p>
+                  </div></a
+                >
+            </div>
+            </div>
+          </li>
+        {{ end }}
+      {{ end }}
+    {{ end }}
+    {{/* </ul> */}}
+  {{ end }}
+{{ end }}
+
+{{ $parent := slice }}
+{{ range $pages }}
+  {{ if .Parent }}
+    {{ $parent = .Parent }}
+  {{ end }}
+{{ end }}
+
+{{ if eq ($context.Param "show_terms") false}}
+  <div class="terms-list terms-list-disabled {{ urlize $title }} {{ urlize $id }} {{ if $parent }}{{ urlize $parent.Title }}{{ end }}">
+  </div>
+{{ else }}
+  <div class="terms-list terms-list-{{ $class }} {{ urlize $title }} {{ urlize $id }} {{ if $parent }}{{ urlize $parent.Title }}{{ end }}">
+    {{ if $title }}
+      <div class="term-title">
+        {{ partial "core/title.html" (dict "title" $title "level" 2 "counter" 0  "context" $context ) }}
+      </div>
+    {{ else if $context}}
+      <div class="term-title">
+        {{ $title := $context.Title }}
+        {{ if $context.Param "relatedTitle" }}
+          {{ $title = $context.Param "relatedTitle"  }}
+        {{ end }}
+        {{ partial "core/title.html" (dict "page" $context "context" $parent "title" $title "level" 2 "kind" $context.Type "counter" 0) }}
+      </div>
+    {{ else if $parent }}
+      <div class="term-title">
+        {{ partial "core/title.html" (dict "page" $parent "level" 2 "counter" 0) }}
+      </div>
+    {{ end }}
+    <ul class="articles summary-{{ $class }} summary-{{ $class }}s">
+      {{ $counter := 0 }}
+      {{ if $pages }}
+        {{ $sort_by := "" }}
+        {{ if eq $context.Section "albums" }}
+          {{ $sort_by = "album-weight" }}
+        {{ end }}
+        {{ if $pages.ByParam $sort_by  }}
+          {{ range $pages.ByParam $sort_by }}
+            {{ $counter = add $counter 1 }}
+            {{ template "summary" (dict "entry" . "context" $context "max" $max "class" $class "counter" $counter "kind" $context.Type "type" (urlize $context.Title)) }}
+          {{ end }}
+        {{ else }}
+          BY TITLE
+        {{ end }}
+      {{ end }}
+      {{ range (where site.Pages.ByTitle "Kind" "section" )}}
+        {{ $section := . }}
+        {{ if $section_names }}
+          {{ range $section_names }}
+            {{ $section_name := . }}
+            {{ if in (urlize $section.Name) $section_name }}
+              {{ $counter = add $counter 1 }}
+              {{ template "summary" (dict "entry" . "context" $context "taxonomy" $section "max" $max "class" $class "counter" $counter) }}
+            {{ end }}
+          {{ end }}
+        {{ end }}
+      {{ end }}
+      {{ range (where site.Pages.ByTitle "Kind" "taxonomy" ) }}
+        {{ $taxonomy := . }}
+        {{ if $taxonomy_names }}
+          {{ range $taxonomy_names }}
+            {{ $taxonomy_name := . }}
+            {{ if in (urlize $taxonomy.Name) $taxonomy_name }}
+              {{ $counter = add $counter 1 }}
+              {{ template "summary" (dict "entry" . "context" $context "taxonomy" $taxonomy "max" $max "class" $class "counter" $counter) }}
+            {{ end }}
+          {{ end }}
+        {{ end }}
+      {{ end }}
+    </ul>
+  </div>
+
+{{ end }}

@@ -1,0 +1,326 @@
+.contact-form {}
+
+.contact-map {
+    // padding: 15px;
+
+    // &:after {
+    //     content: 'Contact Map';
+    // }
+}
+
+.contact-company {
+    display: flex;
+
+    background: darken($primary, 5%);
+    border-bottom-left-radius: 30px;
+    border-bottom-right-radius: 30px;
+
+    ul {
+        list-style: none;
+
+        &>li {
+
+            .contact-legal-name {
+                p {
+                    a {
+                        color: lighten($primary, 25%);
+
+                        &:hover {
+                            color: darken($primary, 25%);
+                        }
+                    }
+
+                    font-weight: 500 !important;
+                    margin: 0 !important;
+                    padding: 0 !important;
+                }
+            }
+
+            a {
+                color: lighten($primary, 40%);
+
+                &:hover {
+                    color: lighten($primary, 100%);
+                }
+            }
+        }
+    }
+}
+
+.contact-info {
+    flex: 1;
+}
+
+
+.footer-social {
+    width: 100% !important;
+
+    .contact-social {
+        p {
+            width: 100% !important;
+            margin: 0 auto 30px auto !important;
+        }
+
+        .contact-social-icons {
+            flex: 1;
+            display: flex;
+            margin: 0;
+            padding: 30px;
+            list-style: none;
+
+            align-items: center;
+            align-self: center;
+            align-content: center;
+
+            justify-content: center;
+            justify-items: center;
+            justify-self: center;
+            height: 100px;
+            min-height: 120px;
+
+
+            li {
+                // flex: 1;
+                font-size: 6rem;
+                text-align: center;
+                padding: 0 20px;
+                // margin: auto 0;
+
+                a {
+                    color: lighten($primary, 30%);
+
+                    &:hover {
+                        color: lighten($primary, 100%);
+                    }
+                }
+
+                span.title {
+                    margin: 10px 0 0 0;
+                    display: block;
+                    font-size: 1.8rem;
+                    text-align: center;
+                }
+            }
+
+            font-size: 4.0rem;
+
+            span {
+                display: none;
+            }
+
+        }
+    }
+}
+
+
+.warning {
+    display: flex;
+    padding: 0 15px 15px 15px;
+
+    h2,
+    p {
+        margin: 0;
+        padding: 0;
+        color: red;
+    }
+
+    p {
+        padding: 5px 0 0 5px;
+    }
+}
+
+.footer-social {
+    .contact-social {
+        display: block;
+
+        p {
+            margin: 10px 0 0 0;
+            padding: 0;
+            display: block;
+            height: 15px;
+            font-size: 1.5rem;
+            text-align: center;
+            color: lighten($primary, 30%);
+            letter-spacing: 3px;
+        }
+
+    }
+}
+
+form {
+    fieldset {
+        margin: 10px;
+        padding: 25px;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 15px;
+
+        .field-control {
+            display: flex;
+            flex-direction: row;
+            margin-bottom: 15px;
+
+            legend {
+                padding: 0 25px;
+            }
+
+            label {
+                padding: 2px 25px;
+            }
+
+            &.wide {
+                flex: 1 1 100%;
+            }
+        }
+
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    input[type="url"],
+    textarea {
+        padding: 10px;
+        border-radius: 10px;
+    }
+
+
+
+    input[type="submit"] {
+        float: right;
+        text-align: right;
+        margin-top: 25px;
+        padding: 10px 25px;
+        border-radius: 15px;
+        border: none;
+        background: $primary;
+        color: #fff;
+    }
+}
+
+.light {
+    form {
+        fieldset {
+            border-color: $primary;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="url"],
+        textarea {
+            background: darken($primary, 55%);
+            color: $primary;
+            background: lighten($primary, 65%);
+            border: 1px lighten($primary, 40%) solid;
+
+            &:focus {
+                background: lighten($primary, 10%);
+                border: lighten($primary, 55%);
+                outline-color: lighten($primary, 25%);
+                color: #fff;
+            }
+        }
+
+
+
+        input[type="submit"] {
+            background: $primary;
+            color: #fff;
+        }
+    }
+}
+
+// .light {
+//     form {
+//         fieldset {
+//             border: 4px red solid;
+//             margin: 10px;
+//             padding: 25px;
+//             border-color: $primary;
+
+//             legend {
+//                 padding: 0 25px;
+//             }
+
+//             label {
+//                 padding: 25px;
+//             }
+//         }
+
+//         input[type="text"],
+//         input[type="email"],
+//         input[type="tel"],
+//         input[type="url"],
+//         textarea {
+// background: lighten($primary, 65%);
+// border: 1px lighten($primary, 40%) solid;
+
+// &:focus {
+//     background: lighten($primary, 10%);
+//     border: lighten($primary, 55%);
+//     outline-color: lighten($primary, 25%);
+//     color: #fff;
+// }
+//         }
+
+
+
+//         input[type="submit"] {
+//             float: right;
+//             text-align: right;
+//             margin-top: 25px;
+//             padding: 10px 25px;
+//             border-radius: 15px;
+//             border: none;
+//             background: $primary;
+//         }
+//     }
+// }
+
+// .light {
+//     form {
+//         fieldset {
+//             margin: 10px;
+//             padding: 25px;
+
+//             legend {
+//                 padding: 0 25px;
+//             }
+
+//             label {
+//                 padding: 25px;
+//             }
+//         }
+
+//         input[type="text"],
+//         input[type="email"],
+//         input[type="tel"],
+//         input[type="url"],
+//         textarea {
+//             padding: 10px;
+//             border-radius: 10px;
+
+//         }
+
+
+
+//         input[type="submit"] {
+//             float: right;
+//             text-align: right;
+//             margin-top: 25px;
+//             padding: 10px 25px;
+//             border-radius: 15px;
+//             border: none;
+//             background: $primary;
+//         }
+//     }
+// }
+
+
+@media (min-device-width: 320px) and (max-device-width: 800px) {
+    body>main.contact-us article>.responsive-row {
+        flex-direction: column-reverse !important;
+    }
+}

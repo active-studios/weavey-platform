@@ -1,0 +1,490 @@
+<meta charset="utf-8" /><meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1, shrink-to-fit=no"
+/>
+{{- if hugo.IsProduction | or (eq site.Params.env "production") | and (ne .Params.robotsNoIndex true) -}}
+  <meta name="robots" content="index, follow" />
+{{- else -}}
+  <meta
+    name="robots"
+    content="noindex, nofollow"
+    data-reason="running in local development"
+  />
+{{- end -}}
+<link
+  rel="icon"
+  type="image/png"
+  href="/images/favicon-192x192.png"
+  sizes="192x192"
+/>
+<link
+  rel="icon"
+  type="image/png"
+  href="/images/favicon-96x96.png"
+  sizes="96x96"
+/>
+<link
+  rel="icon"
+  type="image/png"
+  href="/images/favicon-48x48.png"
+  sizes="48x48"
+/>
+<link
+  rel="icon"
+  type="image/png"
+  href="/images/favicon-32x32.png"
+  sizes="32x32"
+/>
+<link
+  rel="icon"
+  type="image/png"
+  href="/images/favicon-16x16.png"
+  sizes="16x16"
+/>
+
+{{- /* Title */}}
+<title>
+  {{- if .IsHome -}}
+  {{- else -}}
+    {{- if .Title -}}{{- .Title -}} |{{- end -}}
+  {{- end -}}
+  {{- site.Title -}}
+</title>
+
+{{- if .IsHome -}}
+  <meta name="description" content="{{- site.Params.Description -}}" />
+{{- else -}}
+  <meta name="description" content="{{- .Params.Description -}}" />
+{{- end -}}
+
+{{- if hugo.IsProduction | or (eq site.Params.env "production") | and (ne .Params.robotsNoIndex true) -}}
+  {{- if isset .Params "canonical" -}}
+    <link rel="canonical" href="{{- .Params.canonical -}}" />
+  {{- else -}}
+    <link rel="canonical" href="{{- .Permalink -}}" />
+  {{- end -}}
+{{- else -}}
+  {{- if isset .Params "canonical" -}}
+    <link rel="x-canonical" href="{{- .Params.canonical -}}" />
+  {{- else -}}
+    <link rel="x-canonical" href="{{- .Permalink -}}" />
+  {{- end -}}
+{{- end -}}
+
+
+<meta name="author" content="{{- site.Title -}}" />
+<meta
+  name="designer"
+  content="Aubrey and Rachel Alexander (https://activestudios.com)"
+/>
+<meta
+  name="web_author"
+  content="Aubrey Alexander (https://activestudios.com)"
+/>
+<meta name="generator" content="Hugo 0.88.1, Weaver Platform 1.0" />
+
+<link rel="stylesheet" href="/css/default-variables.css" />
+<link rel="stylesheet" href="/css/splide.min.css" />
+<link rel="stylesheet" href="/css/variables.css" />
+
+{{- /* Weaver Theme Support */}}
+{{- $configtheme := "default" -}}
+{{- $theme := "scss/theme-" -}}
+{{- if site.Params -}}
+  {{- if site.Params.weaverplatform -}}
+    {{- $wp := site.Params.weaverplatform -}}
+    {{- range $wp -}}
+      {{- $configtheme = .theme -}}
+    {{- end -}}
+    {{- $configtheme := "hero" -}}
+    {{- with site.Params.weaverplatform -}}
+    {{- end -}}
+    {{- $theme = (print $theme $configtheme) -}}
+  {{- end -}}
+{{- else -}}
+  {{- $theme = "default" -}}
+{{- end -}}
+{{- $theme = (print $theme ".scss") -}}
+
+{{- if $theme -}}
+  <meta name="theme" content="{{- $configtheme -}}" />
+{{- end -}}
+{{- $style := resources.Get "scss/weaver-platform.scss" | toCSS | fingerprint -}}
+<link rel="stylesheet" href="{{- $style.RelPermalink -}}" />
+{{- if $theme -}}
+  {{- $style2 := resources.Get $theme | toCSS | fingerprint -}}
+  <link rel="stylesheet" href="{{- $style2.RelPermalink -}}" />
+{{- end -}}
+
+{{- $file_path_theme := (print "assets/" $theme) -}}
+{{- $style3 := resources.Get "scss/override.scss" | toCSS | fingerprint -}}
+<link rel="stylesheet" href="{{- $style3.RelPermalink -}}" />
+
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+/>
+<link
+  href="https://fonts.cdnfonts.com/css/family-monogram-font-version-01"
+  rel="stylesheet"
+/>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+<link
+  href="https://fonts.googleapis.com/css2?family=Barriecito&family=Cabin:ital,wght@0,400..700;1,400..700&family=Catamaran:wght@100..900&family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700;1,800&family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Kaushan+Script&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Rubik+Bubbles&family=Rubik+Dirt&family=Rubik+Doodle+Shadow&family=Rubik+Mono+One&family=Rubik+Scribble&family=Rubik+Vinyl&family=Rubik:ital,wght@0,300..900;1,300..900&family=Sail&family=Saira+Extra+Condensed:wght@100;200;300&family=Shadows+Into+Light&display=swap"
+  rel="stylesheet"
+/>
+
+<link
+  href="https://fonts.googleapis.com/css2?family=Barriecito&family=Cabin:ital,wght@0,400..700;1,400..700&family=Catamaran:wght@100..900&family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700;1,800&family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Kaushan+Script&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Rubik+Bubbles&family=Rubik+Dirt&family=Rubik+Doodle+Shadow&family=Rubik+Mono+One&family=Rubik+Scribble&family=Rubik+Vinyl&family=Rubik:ital,wght@0,300..900;1,300..900&family=Sail&family=Saira+Extra+Condensed:wght@100;200;300&display=swap"
+  rel="stylesheet"
+/>
+<link
+  href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,500;1,700;1,900&display=swap"
+  rel="stylesheet"
+/>
+<link
+  href="https://fonts.googleapis.com/css2?family=Gabarito:wght@700;900&family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&family=Young+Serif&display=swap"
+  rel="stylesheet"
+/>
+<link
+  href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;500;600;700&display=swap"
+  rel="stylesheet"
+/>
+<link
+  href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700;1,800&display=swap"
+  rel="stylesheet"
+/>
+<link
+  href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700;1,800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+  rel="stylesheet"
+/>
+<link
+  href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700;1,800&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Saira+Extra+Condensed:wght@100;200;300&display=swap"
+  rel="stylesheet"
+/>
+<link
+  href="https://fonts.googleapis.com/css2?family=Cabin:ital,wght@0,400..700;1,400..700&family=Catamaran:wght@100..900&family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700;1,800&family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Rubik+Bubbles&family=Rubik+Dirt&family=Rubik+Doodle+Shadow&family=Rubik+Mono+One&family=Rubik+Scribble&family=Rubik+Vinyl&family=Rubik:ital,wght@0,300..900;1,300..900&family=Saira+Extra+Condensed:wght@100;200;300&display=swap"
+  rel="stylesheet"
+/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  href="https://fonts.googleapis.com/css2?family=Cabin:ital,wght@0,400..700;1,400..700&family=Catamaran:wght@100..900&family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700;1,800&family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Rubik+Bubbles&family=Rubik+Dirt&family=Rubik+Doodle+Shadow&family=Rubik+Mono+One&family=Rubik+Scribble&family=Rubik+Vinyl&family=Rubik:ital,wght@0,300..900;1,300..900&family=Sail&family=Saira+Extra+Condensed:wght@100;200;300&display=swap"
+  rel="stylesheet"
+/>
+<link
+  href="https://fonts.googleapis.com/css2?family=Cabin:ital,wght@0,400..700;1,400..700&family=Catamaran:wght@100..900&family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700;1,800&family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Kaushan+Script&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Rubik+Bubbles&family=Rubik+Dirt&family=Rubik+Doodle+Shadow&family=Rubik+Mono+One&family=Rubik+Scribble&family=Rubik+Vinyl&family=Rubik:ital,wght@0,300..900;1,300..900&family=Sail&family=Saira+Extra+Condensed:wght@100;200;300&display=swap"
+  rel="stylesheet"
+/>
+<link
+  href="https://fonts.googleapis.com/css2?family=Architects+Daughter&family=Barriecito&family=Cabin:ital,wght@0,400..700;1,400..700&family=Catamaran:wght@100..900&family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700;1,800&family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Kaushan+Script&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Rubik+Bubbles&family=Rubik+Dirt&family=Rubik+Doodle+Shadow&family=Rubik+Mono+One&family=Rubik+Scribble&family=Rubik+Vinyl&family=Rubik:ital,wght@0,300..900;1,300..900&family=Sail&family=Saira+Extra+Condensed:wght@100;200;300&family=Shadows+Into+Light&display=swap"
+  rel="stylesheet"
+/>
+<link
+  href="https://fonts.googleapis.com/css2?family=Architects+Daughter&family=Barriecito&family=Cabin:ital,wght@0,400..700;1,400..700&family=Catamaran:wght@100..900&family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700;1,800&family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Kaushan+Script&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Prompt:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Rubik+Bubbles&family=Rubik+Dirt&family=Rubik+Doodle+Shadow&family=Rubik+Mono+One&family=Rubik+Scribble&family=Rubik+Vinyl&family=Rubik:ital,wght@0,300..900;1,300..900&family=Sail&family=Saira+Extra+Condensed:wght@100;200;300&family=Shadows+Into+Light&display=swap"
+  rel="stylesheet"
+/>
+<link
+  href="https://fonts.googleapis.com/css2?family=Architects+Daughter&family=Barriecito&family=Cabin:ital,wght@0,400..700;1,400..700&family=Catamaran:wght@100..900&family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700;1,800&family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Kaushan+Script&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Prompt:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Rubik+Bubbles&family=Rubik+Dirt&family=Rubik+Doodle+Shadow&family=Rubik+Mono+One&family=Rubik+Scribble&family=Rubik+Vinyl&family=Rubik:ital,wght@0,300..900;1,300..900&family=Sail&family=Saira+Extra+Condensed:wght@100;200;300&family=Shadows+Into+Light&display=swap"
+  rel="stylesheet"
+/>
+<link
+  href="https://fonts.googleapis.com/css2?family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap"
+  rel="stylesheet"
+/>
+
+<meta charset="utf-8" />
+
+{{- if site.Params.GoogleRecaptchaV2ApiKey -}}
+  <script
+    src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit"
+    async
+    defer
+  ></script>
+{{- else if site.Params.GoogleRecaptchaV3ApiKey -}}
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+  <script src="https://www.google.com/recaptcha/enterprise.js?render={{- site.Params.GoogleRecaptchaApiKey -}}"></script>
+{{- end -}}
+
+
+<!-- Photoswipe css/js libraries -->
+<script type="module">
+  import PhotoSwipeLightbox from "/js/lib/photoswipe/photoswipe-lightbox.esm.js";
+
+  const fullscreenAPI = getFullscreenAPI();
+
+  // Create custom container
+  // which will be stretched to fullscreen.
+  //
+  // (we can not use PhotoSwipe root element (.pswp),
+  //  as it is created only after openPromise is resolved)
+  //
+  const pswpContainer = getContainer();
+
+  function getFullscreenPromise() {
+    // Always resolve promise,
+    // as wa want to open lightbox
+    // (no matter if fullscreen is supported or not)
+    return new Promise((resolve) => {
+      if (!fullscreenAPI || fullscreenAPI.isFullscreen()) {
+        // fullscreen API not supported, or already fullscreen
+        resolve();
+        return;
+      }
+
+      document.addEventListener(
+        fullscreenAPI.change,
+        (event) => {
+          pswpContainer.style.display = "block";
+          // delay to make sure that browser fullscreen animation is finished
+          setTimeout(function () {
+            resolve();
+          }, 300);
+        },
+        { once: true },
+      );
+
+      fullscreenAPI.request(pswpContainer);
+    });
+  }
+
+  const options = {
+    gallery: "#masonry-gallery-term",
+    children: "a",
+    mouseMovePan: true,
+    pswpModule: () => import("/js/lib/photoswipe/photoswipe.esm.js"),
+
+    // Add function that returns promise
+    openPromise: getFullscreenPromise,
+
+    // Append PhotoSwipe to our container
+    appendToEl: fullscreenAPI ? pswpContainer : document.body,
+
+    // disable opening/closing animations
+    showAnimationDuration: 0,
+    hideAnimationDuration: 0,
+
+    // Add if you're using responsive images
+    // since viewport size is unpredictable
+    // at initialization
+    preloadFirstSlide: false,
+  };
+
+  const lightbox = new PhotoSwipeLightbox(options);
+  lightbox.on("close", () => {
+    pswpContainer.style.display = "none";
+    if (fullscreenAPI && fullscreenAPI.isFullscreen()) {
+      fullscreenAPI.exit();
+    }
+  });
+  lightbox.init();
+
+  // Simple fullscreen API helper,
+  // supports unprefixed and webkit-prefixed versions
+  function getFullscreenAPI() {
+    let api;
+    let enterFS;
+    let exitFS;
+    let elementFS;
+    let changeEvent;
+    let errorEvent;
+
+    if (document.documentElement.requestFullscreen) {
+      enterFS = "requestFullscreen";
+      exitFS = "exitFullscreen";
+      elementFS = "fullscreenElement";
+      changeEvent = "fullscreenchange";
+      errorEvent = "fullscreenerror";
+    } else if (document.documentElement.webkitRequestFullscreen) {
+      enterFS = "webkitRequestFullscreen";
+      exitFS = "webkitExitFullscreen";
+      elementFS = "webkitFullscreenElement";
+      changeEvent = "webkitfullscreenchange";
+      errorEvent = "webkitfullscreenerror";
+    }
+
+    if (enterFS) {
+      api = {
+        request: function (el) {
+          if (enterFS === "webkitRequestFullscreen") {
+            el[enterFS](Element.ALLOW_KEYBOARD_INPUT);
+          } else {
+            el[enterFS]();
+          }
+        },
+
+        exit: function () {
+          return document[exitFS]();
+        },
+
+        isFullscreen: function () {
+          return document[elementFS];
+        },
+
+        change: changeEvent,
+        error: errorEvent,
+      };
+    }
+
+    return api;
+  }
+
+  function getContainer() {
+    const pswpContainer = document.createElement("div");
+    pswpContainer.style.background = "#000";
+    pswpContainer.style.width = "100%";
+    pswpContainer.style.height = "100%";
+    pswpContainer.style.display = "none";
+    document.body.appendChild(pswpContainer);
+    return pswpContainer;
+  }
+</script>
+
+<script src="/js/lib/weaver-platform/activestudios-carousel.js"></script>
+<script src="/js/lib/weaver-platform/activestudios-effect.js"></script>
+<script src="/js/lib/weaver-platform/activestudios-hamburger.js"></script>
+<script src="/js/lib/weaver-platform/activestudios-history.js"></script>
+<script src="/js/lib/weaver-platform/activestudios-parallax.js"></script>
+<script src="/js/lib/weaver-platform/activestudios-search.js"></script>
+<script src="/js/lib/splide/splide.js"></script>
+
+{{- $mode := "light" -}}
+{{- $mode_switch := false -}}
+{{- if site.Params.weaverplatform -}}
+  {{- $wp := site.Params.weaverplatform -}}
+  {{- range $wp -}}
+    {{- $mode = .mode -}}
+    {{- $mode_switch = .mode_switch -}}
+  {{- end -}}
+  {{- $configtheme := "hero" -}}
+  {{- with site.Params.weaverplatform -}}
+  {{- end -}}
+  {{- $theme = (print $theme $configtheme) -}}
+{{- end -}}
+
+
+<script src="/js/lib/weaver-platform/activestudios-gallery.js"></script>
+
+<script>
+  window.mode = {
+    default: "{{ $mode }}",
+    switch: "{{ $mode_switch }}" == "true"
+  };
+</script>
+<script src="/js/lib/weaver-platform/activestudios-lightdarkmode.js"></script>
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:site" content="{{- site.Params.Twitter_Site -}}" />
+
+<!-- site description -->
+<!-- if description does not contain site title, prepend that? -->
+{{- if .Params.Description -}}
+  <meta name="description" content="{{- .Params.Description -}}" />
+{{- else if .Site.Params.Description -}}
+  <meta name="description" content="{{- .Site.Params.Description -}}" />
+{{- end -}}
+{{- if .Params.Keywords -}}
+  <meta name="keywords" content="{{- .Params.Keywords -}}" />
+{{- else if .Site.Params.Keywords -}}
+  <meta name="keywords" content="{{- .Site.Params.Keywords -}}" />
+{{- end -}}
+
+
+<!-- og meta tags -->
+<meta
+  property="og:title"
+  content="{{- if .Title -}}{{- .Title -}}{{- end -}}"
+/>
+<meta property="og:type" content="website" />
+<meta property="og:url" content="{{- .Site.BaseURL -}}" />
+{{- if .Params.Description -}}
+  <meta property="og:description" content="{{- .Params.Description -}}" />
+{{- else if .Site.Params.Description -}}
+  <meta property="og:description" content="{{- .Site.Params.Description -}}" />
+{{- end -}}
+{{- if .Params.Keywords -}}
+  <meta property="og:keywords" content="{{- .Params.Keywords -}}" />
+{{- else if .Site.Params.Keywords -}}
+  <meta property="og:keywords" content="{{- .Site.Params.Keywords -}}" />
+{{- end -}}
+{{- if .Params.og_image -}}
+  <meta
+    property="og:image"
+    content="{{- .Site.BaseURL -}}{{- .Params.og_image | relURL -}}"
+  />
+  <meta
+    property="og:image:secure_url"
+    content="{{- .Params.og_image | absURL -}}"
+  />
+{{- else -}}
+  <meta
+    property="og:image"
+    content="{{- .Site.BaseURL -}}{{- .Site.Params.og_image |
+      relURL
+    -}}"
+  />
+  <meta
+    property="og:image:secure_url"
+    content="{{- .Site.Params.og_image | absURL -}}"
+  />
+{{- end -}}
+
+{{- /* Site Verification Tags */}}
+{{- if site.Params.analytics.googlesiteVerificationTag -}}
+  <meta
+    name="google-site-verification"
+    content="{{- site.Params.analytics.googlesiteVerificationTag -}}"
+  />
+{{- end -}}
+{{- if site.Params.analytics.yandexsiteVerificationTag -}}
+  <meta
+    name="yandex-verification"
+    content="{{- site.Params.analytics.yandexsiteVerificationTag -}}"
+  />
+{{- end -}}
+{{- if site.Params.analytics.bingsiteVerificationTag -}}
+  <meta
+    name="msvalidate.01"
+    content="{{- site.Params.analytics.bingsiteVerificationTag -}}"
+  />
+{{- end -}}
+{{- if site.Params.analytics.naversiteVerificationTag -}}
+  <meta
+    name="naver-site-verification"
+    content="{{- site.Params.analytics.naversiteVerificationTag -}}"
+  />
+{{- end -}}
+
+{{- $analyticsApiKey := "" -}}
+{{- if and site.Params site.Params.api site.Params.api.google -}}
+  {{- with site.Params.api.google -}}
+    {{- with (index . 0) -}}
+      {{- if .Analytics -}}
+        {{- $analyticsApiKey = .Analytics -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- if $analyticsApiKey -}}
+  <!-- Google tag (gtag.js) -->
+  <script
+    async
+    src="https://www.googletagmanager.com/gtag/js?id={{- $analyticsApiKey -}}"
+  ></script>
+  <script> window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag('js', new Date());
+    gtag('config', '{{- $analyticsApiKey -}}');
+  </script>
+{{- end -}}
+
+{{- if site.Data.ld.organization -}}
+<script type="application/ld+json">
+  {{- site.Data.ld.organization -}}
+</script>
+{{- end -}}

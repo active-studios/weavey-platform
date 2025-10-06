@@ -1,0 +1,11 @@
+<header class="hero {{ urlize .Title }} weaver-platform-default ">
+  <!-- do this in a more semantic way -->
+  <div class="home">
+    <div class="{{ urlize .Title }} top-nav weaver-platform-default">
+      <nav class="dropdown menu">
+        {{ partial "nav/menu.html" . }}
+      </nav>
+    </div>
+  </div>
+  <div style="clear:both;"></div>
+</header>

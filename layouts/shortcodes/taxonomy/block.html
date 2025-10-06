@@ -1,0 +1,83 @@
+{{ $taxonomy := .Get "taxonomy" -}}
+{{ $term := .Get "term" -}}
+{{ $tag := .Get "tag" -}}
+{{ $pageSize := default 5 (.Get "pageSize") -}}
+{{ $type := "taxonomy" }}
+{{ if .Get "type" }}
+  {{ $type = (.Get "type") }}
+{{ end }}
+
+{{ range $.Site.Pages -}}
+  {{ $image_type_arr := split .RelPermalink "." -}}
+  {{ $image_ext := index $image_type_arr 1 -}}
+  {{ $page := . -}}
+  {{ $subpages := .Site.RegularPages | first 0 -}}
+
+  {{ if or $taxonomy $term -}}
+    {{ range $.Site.Pages -}}
+      {{ if .Parent -}}
+        {{ if $term -}}
+          {{ $subpages = .Pages -}}
+        {{ end -}}
+        {{ if eq .Type $taxonomy -}}
+          {{ $subpages = .Parent.Pages -}}
+        {{ end -}}
+      {{ end -}}
+    {{ end -}}
+  {{ end -}}
+  {{ if not $subpages -}}
+    {{ $subpages = .Data.Terms -}}
+  {{ end -}}
+  {{ if not $subpages -}}
+    {{ $subpages = .Site.Data.Pages -}}
+  {{ end -}}
+  {{ if not $subpages -}}
+    {{ $subpages = .Pages -}}
+  {{ end -}}
+  {{ $show := true -}}
+  {{ if and $tag (eq .Type $type) -}}
+  {{ else }}
+    {{ if and $subpages (ne .Kind "taxonomy") -}}
+      {{ if and $taxonomy -}}
+        {{ if or (eq .Type $taxonomy) (eq .Section $taxonomy) -}}
+          <div
+            style="display: flex; flex-direction: row; flex-wrap: wrap; gap: 5px; align-items: center; justify-content: center;"
+          >
+            {{ range $subpages }}
+              {{ $thumb := slice }}
+              {{ range .Resources -}}
+                {{ if and (not $thumb) }}
+                  {{ $thumb = . -}}
+                {{ end }}
+              {{ end }}
+              {{ if $thumb }}
+                <div
+                  style="flex: 1 1 calc(49.333% - 20px); overflow: hidden; padding: 10px; border-radius: 5px; text-align: center;"
+                >
+                  {{/*  <div
+                    style="width: 100%; height: 150px; object-fit: cover; overflow: hidden; margin: 0 auto;"
+                  >
+                    {{ with $thumb.Resize "400x" -}}
+                      {{ partial "gallery/thumb.html" (dict "context" . "tag" $tag "page" $page ) -}}
+                    {{ end -}}
+                  </div>  */}}
+                  {{ if .Param "icon" }}
+                    <span style="font-size: 4.8rem;">
+                      <a href="{{ .Permalink}}">
+                        <i class='fa-solid fa-{{ .Param "icon" }}'></i>
+                      </a>
+                    </span>
+                  {{ end }}
+                  <p style="margin: 0; font-size: 1.2rem; font-weight: 800;">
+                    {{ .Title }}
+                  </p>
+                </div>
+              {{ end }}
+            {{ end }}
+          </div>
+        {{ end }}
+      {{ end }}
+    {{ end }}
+  {{ end }}
+
+{{ end }}

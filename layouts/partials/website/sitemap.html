@@ -1,0 +1,107 @@
+<div class="sitemap-search">
+  <fieldset>
+  <input id="sitemap-search-text" />
+  <label for="search">Can I Help You Find Something?</label>
+  </fieldset>
+</div>
+
+{{ define "souspages" }}
+  {{ if .Pages }}
+    <ul class="sitemap-section-pages {{ urlize .Title}}">
+        {{ range .Pages.ByWeight }}
+
+          {{ if (or (eq .Params.Sitemap false) (eq .Title "False") (eq .Draft true)) }}
+            <!-- skip -->
+          {{ else }}
+          <li class="sitemap-section-page {{ urlize .Title}}">
+              <div class="title">
+                {{ if .Param "icon" }}
+                    <div class="icon"></span><i class='fa-solid fa-{{ .Param "icon" }}'></i></div>
+                {{ else if .Parent.Param "icon" }}
+                  <div class="icon"></span><i class='fa-solid fa-{{ .Parent.Param "icon" }}'></i></div>
+                {{ else if eq .Parent.Kind "term"}}
+                    <div class="icon"></span><i class='fa-solid fa-{{ "tag" }}'></i></div>
+                {{ else if eq .Parent.Kind "gallery"}}
+                    <div class="icon"></span><i class='fa-solid fa-{{ "picture" }}'></i></div>
+                {{ else if eq .Parent.Kind "gallery-image"}}
+                    <div class="icon"></span><i class='fa-solid fa-{{ "picture" }}'></i></div>
+                {{ end}}
+              <a href="{{ .Permalink }}">
+
+                {{ default .Permalink .Title }}
+              </a>
+            </div>
+
+            {{ template "souspages" . }}
+          {{ end }}
+        </li>
+        {{ end }}
+    </ul>
+  {{ end }}
+{{ end }}
+
+
+<ul class="sitemap-home">
+{{ range site.Pages }}
+      {{ if .Draft}}
+      {{ else if (eq .Params.Sitemap false)}}
+      {{ else if.IsHome }}
+        {{ range .Pages}}
+          {{ if and (ne .Title "Sitemap")  (ne .Title "Tags")  (ne .Title "Icons")  (ne .Title "Articles") (ne .Title "Articles") (ne .Type "panel") }}
+            {{ if not (len .Pages) }}
+              <li class="sitemap-page {{ urlize .Title}}">
+
+                <div class="title">
+                    {{ if .Param "icon" }}
+                      <div class="icon"><i class='fa-solid fa-{{ .Param "icon" }}'></i> </div>
+                    {{ end }}
+
+                  <a href="{{ .Permalink }}">
+                    {{ strings.Title (default .Permalink .Title) }}
+                  </a>
+                </div>
+                <p>{{ .Description }}</p>
+
+                {{ template "souspages" . }}
+              </li>
+              {{ else }}
+                {{/*  <li> PARENT!!!<br />{{ .Title }}<Br /> {{ .Parent }}</li>  */}}
+                {{ end}}
+            {{ end}}
+          {{ end}}
+      {{ end}}
+  {{ end }}
+
+
+</ul>
+
+<ul class="sitemap-sections">
+  {{ range site.Pages }}
+
+      {{ if or .IsHome .Draft}}
+      {{ else if or .Draft (eq .Params.Sitemap false)}}
+      {{ else if .Parent.IsHome }}
+        {{ if and (ne .Title "Sitemap")  (ne .Title "Tags")  (ne .Title "Icons")  (ne .Title "Articles") (ne .Title "Articles") (ne .Type "panel") }}
+          {{ if len .Pages }}
+          <li class="sitemap-section {{ urlize .Title}}">
+              <div class="title"></div>
+                {{ if .Param "icon" }}
+                  <div class="icon">
+                    <i class='fa-solid fa-{{ .Param "icon" }}'></i>
+                  </div>
+                {{ end }}
+                <a href="{{ .Permalink }}">
+                  {{ default .Permalink .Title }}
+                </a>
+              </div>
+              <p>{{ .Description }}</p>
+              {{ template "souspages" . }}
+            </li>
+            {{ else }}
+              {{/*  <li> PARENT!!!<br />{{ .Title }}<Br /> {{ .Parent }}</li>  */}}
+              {{ end}}
+          {{ end}}
+      {{ end}}
+  {{ end }}
+
+</ul>

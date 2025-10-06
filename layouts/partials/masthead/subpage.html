@@ -1,0 +1,24 @@
+<header class="{{ urlize .Title }} weaver-platform-default">
+    <div class="hero-outer parallax website subpage {{ urlize .Title }}">
+
+        {{ partial "logo/hero-logo.html" . }}
+
+        <!-- do this in a more semantic way -->
+        <div class="website subpage {{ urlize .Title }} weaver-platform-default">
+            <div class="website {{ urlize .Title }} top-nav">
+                <div class="grid">
+                    <div class="box a">
+                    </div>
+                    <div class="box b">
+                        <nav class="dropdown menu">
+                            {{ partial "nav/menu.html" . }}
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="clear: both;"></div>
+        <div class="nav-shift subpage"></div>
+        <br />
+
+</header>

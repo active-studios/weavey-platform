@@ -1,0 +1,98 @@
+.light-dark-switch {
+  position: fixed;
+  bottom: 0;
+  left: 15px;
+  z-index: 100000;
+  overflow: hidden;
+  height: 100px;
+  color: rgba($alternative, 0.8);
+
+  &:hover {
+    color: darken($alternative, 20%);
+  }
+
+  &.mode-light {
+    &>.light-side {
+      top: -80px;
+      opacity: 1;
+      color: transparent;
+      transition: color 0.5s ease-in-out;
+
+      &:hover {
+        color: #000;
+      }
+    }
+  }
+
+  &.mode-dark {
+    &>.dark-side {
+      top: 0;
+      opacity: 1;
+      color: transparent;
+      transition: color 0.5s ease-in-out;
+
+      &:hover {
+        color: #fff;
+      }
+    }
+  }
+
+
+  &>.dark-side,
+  &>.light-side {
+    transition: all 1.5s ease-in-out;
+    padding-top: 15px;
+    position: relative;
+    top: 80px;
+    width: 40px;
+    height: 80px;
+    font-size: 3rem;
+    text-align: center;
+    opacity: 0;
+    cursor: pointer;
+
+    .text {
+      font-size: 1.2rem;
+      display: block;
+    }
+  }
+}
+
+
+// .theme-switch-wrapper {
+//   position: fixed;
+//   top: 0;
+//   right: -25px;
+//   width: 50px;
+//   height: 50px;
+//   z-index: 100000;
+
+//   display: flex;
+//   // display: none;
+
+//   .dark-side {
+//     color: #2b2d85;
+//   }
+
+//   .light-side {
+//     color: #e7d50f;
+//   }
+
+//   .dark-side,
+//   .light-side {
+//     padding: 2px;
+//     font-size: 3rem;
+//   }
+
+//   color: $alternative;
+
+//   transition: rotate 2s;
+
+//   &.mode-dark {
+//     rotate: 0deg;
+//   }
+
+//   &.mode-light {
+//     rotate: 180deg;
+//   }
+// }

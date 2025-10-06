@@ -1,0 +1,11 @@
+{{ partial "core/title.html" (
+  dict    "title" (.Get "title")
+  "level" (.Get "level")
+  "counter" (.Get "counter")
+  "icon" (.Get "icon")
+  "image" (.Get "image")
+  "link" (.Get "link")
+  "url" (.Get "url")
+  "class" (default "default-link" (.Get "class"))
+  )
+}}

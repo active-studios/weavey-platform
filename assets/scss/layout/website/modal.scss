@@ -1,0 +1,42 @@
+/* Weaver Platform - Layout - Website - Modal */
+
+#modal {
+    display: none;
+
+    &.active {
+        display: block;
+
+        div.logo {
+            animation: fadeIn 2s;
+            animation-delay: 1s;
+            animation-timing-function: ease-in-out;
+            animation-fill-mode: forwards;
+
+            div.logo-inner {
+                img {
+                    max-width: 25%;
+                }
+            }
+
+
+        }
+
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 100vh;
+        width: 100vw;
+        z-index: 1000000;
+        background: #000;
+
+        &>div {
+            text-align: center;
+            width: 100vw;
+            height: 100vh;
+            transform: translate(0%, 25%);
+
+        }
+    }
+}

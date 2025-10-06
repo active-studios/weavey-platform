@@ -1,0 +1,156 @@
+@media (min-width:320px) {
+   .photo-credit-source {
+      float: none;
+      text-align: left;
+
+      .photo-credit-source-title .photo-credit-source-info,
+      .photo-credit-copyright {
+         float: none;
+         text-align: left;
+      }
+   }
+
+   .photo-credit-description {
+
+      margin: 15px 0 0 0;
+      width: 98%;
+      float: none;
+      text-align: left;
+      font-size: 0.8em;
+   }
+}
+
+
+/* smartphones, portrait iPhone, portrait 480x320 phones (Android) */
+
+
+@media (min-width:800px) {
+   .photo-credit-text-container {
+
+      .photo-credit-source {
+         width: 40%;
+         float: right;
+         margin: 0;
+      }
+
+      .photo-credit-description {
+         width: 55%;
+         float: left;
+      }
+
+   }
+}
+
+.photo-credit {
+   width: 100%;
+   min-width: clamp(100px, 50%, 1000px);
+   color: var(--color-foreground);
+   transition: color 2s ease-in-out, background-color 2s ease-in-out;
+
+   &.photo {
+      border: 1px rgba(0, 0, 0, 0.25) solid;
+      transition: color 2s ease-in-out, background-color 2s ease-in-out;
+      background: var(--color-background);
+      color: var(--color-foreground);
+      margin: 0 0 25px 0;
+      padding: 15px;
+   }
+
+   .photo-credit-image {
+      margin: 0;
+      padding: 0;
+
+      img {
+         width: 100% !important;
+         height: 100% !important;
+         margin: 0;
+         padding: 0;
+         border: none;
+      }
+   }
+
+
+   .photo-credit-source {
+      margin: 15px 20px 0 0;
+
+      .photo-credit-source-info {
+         font-size: 0.9em;
+         opacity: 0.4;
+      }
+
+      .photo-credit-copyright {
+         transition: 1s all;
+         opacity: 0;
+
+         font-size: 0.8em;
+      }
+
+   }
+
+   .photo-credit-description {
+
+      margin-top: 15px 0 0 0 !important;
+      text-align: left;
+      border-left: 15px $alternative solid;
+      opacity: 0.6;
+
+      div {
+         padding-left: 10px;
+         text-wrap: break-word;
+         word-wrap: break-word;
+      }
+   }
+
+   .photo-credit-people {
+      transition: 1s all;
+      opacity: 0;
+      margin: $gutter / 1.5 0 0 0;
+      display: flex;
+      font-size: 0.8em;
+
+      .photo-credit-people-label {
+         text-wrap: none;
+         word-wrap: none;
+         width: 170px;
+      }
+   }
+
+   .photo-credit-source {
+      text-align: right;
+      font-weight: bold;
+   }
+
+   .photo-credit-source-title {
+      display: none;
+      opacity: 0.9;
+      font-size: 1.1em;
+      padding-bottom: 3px;
+   }
+
+   .photo-credit-source-info {
+      font-weight: none;
+   }
+
+   .photo-credit-copyright {
+      font-weight: none;
+   }
+
+   &:hover {
+      .photo-credit-source {
+
+         .photo-credit-copyright {
+            opacity: 1;
+         }
+      }
+
+      .photo-credit-people {
+         opacity: 1;
+      }
+   }
+}
+
+@media (min-width:800px) {
+   .photo-credit-source-title {
+      display: block !important;
+   }
+}

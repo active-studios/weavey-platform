@@ -1,0 +1,30 @@
+/* Weaver Platform - Website - Breadcrumb */
+
+.breadcrumb {
+    padding-top: 30px;
+    background: transparent;
+    font-size: 1.2em;
+    margin-bottom: 25px;
+
+
+    ol,
+    ul {
+        background: transparent;
+        padding-left: 0;
+        margin: 0;
+
+        &>li {
+            display: inline;
+        }
+
+        &>li:not(:last-child)::after {
+            content: "»";
+        }
+    }
+
+
+}
+
+.subpage .breadcrumb {
+    padding-top: 20px;
+}

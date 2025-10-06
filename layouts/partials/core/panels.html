@@ -1,0 +1,42 @@
+{{ $pages := .RegularPages }}
+{{ if $pages }}
+  {{ range $pages }}
+    {{ if or (eq .Parent.Type "home") (eq .Parent.Type "subpage") (eq .Type "subpage") (eq .Type "term") }}
+      {{ if eq .Type "panel" }}
+        <!-- Show Panels -->
+        {{ if .Params.image }}
+          <section
+            class="default image-panel {{ .Params.background }} {{ if .Params.summary }}
+              summary-{{ .Params.summary }} summary-{{ .Params.summary }}s
+            {{ end }} {{ .Params.name }} {{ urlize .Title }} image-panel-align-{{ .Param "image-align" }} weaver-platform-default"
+          >
+            <img src="/images/{{ .Params.image }}" />
+          </section>
+        {{ else }}
+          <section
+            class="default panel {{ .Params.background }} {{ if .Params.summary }}
+              summary-{{ .Params.summary }} summary-{{ .Params.summary }}s
+            {{ end }} {{ .Params.name }} {{ urlize .Title }} weaver-platform-default"
+          >
+            <article
+              class="container {{ .Kind }}-{{ .Type }} {{ .Params.usage }} {{ .Params.name }} {{ urlize .Title }} weaver-platform-default"
+            >
+              {{ partial "core/columns.html" . }}
+            </article>
+          </section>
+        {{ end }}
+      {{ else }}
+        <h4 style="display: none;">
+          {{ .Title }} not dispayed. Panels can only be on home pages:
+          {{ .Parent.Type }} has
+          {{ .Type }}
+        </h4>
+      {{ end }}
+    {{ else }}
+      <h4>
+        Panels can only be on home pages: {{ .Parent.Type }} has
+        {{ .Type }}
+      </h4>
+    {{ end }}
+  {{ end }}
+{{ end }}
